@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DL Study Guide — Krish Gupta</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --bg:#070a12;--card:#0d1220;--card2:#111827;--border:#1a2640;
+  --accent:#4f8ef7;--cyan:#22d3ee;--green:#10b981;--amber:#f59e0b;
+  --red:#ef4444;--purple:#a78bfa;--pink:#f472b6;
+  --text:#e2e8f0;--muted:#546a8a;--formula:#060a10;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HERO */
+.hero{padding:44px 20px 32px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(79,142,247,0.08),transparent);pointer-events:none}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:20px;padding:4px 14px;margin-bottom:14px;letter-spacing:1px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,40px);font-weight:800;background:linear-gradient(135deg,#4f8ef7 0%,#22d3ee 40%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;margin-bottom:10px}
+.hero p{color:var(--muted);font-size:14px;margin-bottom:22px}
+.hero-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.hstat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 16px;font-size:12px;color:var(--cyan);font-weight:500;font-family:'DM Sans',sans-serif}
+
+/* LANG TOGGLE */
+.lang-wrap{display:flex;justify-content:center}
+.lang-toggle{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:3px;width:fit-content}
+.lang-btn{padding:7px 22px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.lang-btn.active{background:var(--accent);color:#fff}
+
+/* CONTROLS */
+.ctrl{position:sticky;top:0;z-index:100;background:rgba(7,10,18,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 16px}
+.sw{position:relative;margin-bottom:10px}
+.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
+#search{width:100%;padding:10px 12px 10px 36px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+#search:focus{border-color:var(--accent)}
+#search::placeholder{color:var(--muted)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fb{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;font-weight:600;letter-spacing:.3px}
+.fb:hover{border-color:var(--accent);color:var(--accent)}
+.fb.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* CONTENT */
+.content{max-width:920px;margin:0 auto;padding:16px}
+.tc{font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:#2a3f60}
+.card.open{border-color:var(--accent)}
+.ch{padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;transition:background .15s}
+.card.open .ch{background:rgba(79,142,247,0.04)}
+.cnum{width:30px;height:30px;border-radius:7px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.card.open .cnum{background:rgba(79,142,247,0.12);border-color:var(--accent);color:var(--accent)}
+.ctw{flex:1;min-width:0}
+.ct{font-size:14px;font-weight:600;color:var(--text);font-family:'Syne',sans-serif}
+.cs{font-size:11px;color:var(--muted);margin-top:2px}
+.cbadges{display:flex;gap:4px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.bdg{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.bf{background:rgba(16,185,129,0.12);color:#10b981}
+.bg2{background:rgba(245,158,11,0.12);color:#f59e0b}
+.bc{background:rgba(167,139,250,0.12);color:#a78bfa}
+.bn{background:rgba(34,211,238,0.1);color:#22d3ee}
+.chev{color:var(--muted);font-size:11px;transition:transform .25s;margin-left:4px;flex-shrink:0}
+.card.open .chev{transform:rotate(180deg)}
+
+/* BODY */
+.cb{display:none;border-top:1px solid var(--border)}
+.card.open .cb{display:block}
+.mtabs{display:flex;border-bottom:1px solid var(--border)}
+.mt{padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.mt.active{color:var(--accent);border-bottom-color:var(--accent)}
+.ans{display:none;padding:16px}
+.ans.active{display:block}
+
+/* CONTENT STYLES */
+.at{font-size:14px;line-height:1.8;color:#b8cce4}
+.fm{background:var(--formula);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:12px 16px;margin:12px 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--cyan);line-height:2;white-space:pre-wrap}
+.fm .fl{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--muted);font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px;display:block}
+.st{font-size:10px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:1.2px;margin:14px 0 6px;display:flex;align-items:center;gap:8px}
+.st::after{content:'';flex:1;height:1px;background:var(--border)}
+ul.pl{margin:6px 0 6px 16px}
+ul.pl li{font-size:13px;line-height:1.75;color:#8facc4;margin-bottom:3px}
+ul.pl li b{color:#d0dff0;font-weight:600}
+ul.pl li .tag{font-size:10px;background:rgba(79,142,247,0.15);color:var(--accent);padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:600}
+.gs{width:100%;border-radius:8px;background:var(--formula);border:1px solid var(--border);margin:12px 0;overflow:hidden;display:block}
+.tip{background:rgba(79,142,247,0.07);border:1px solid rgba(79,142,247,0.18);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#93b4d4;margin:12px 0}
+.tip b{color:#60a5fa}
+.warn{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#c9a462;margin:12px 0}
+.warn b{color:#f59e0b}
+.notebox{background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.18);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#b09be0;margin:12px 0}
+.notebox b{color:#a78bfa}
+.nr{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+@media(max-width:520px){.two-col{grid-template-columns:1fr}}
+.mini-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.mini-card .mc-title{font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">KRISH GUPTA · DL NOTES 2025–26</div>
+  <h1>Deep Learning<br>Complete Study Guide</h1>
+  <p>Based on your actual notes · 2-mark & 6-mark answers · English + Hinglish</p>
+  <div class="hero-stats">
+    <span class="hstat">📓 27 Pages of Notes</span>
+    <span class="hstat">📚 28 Topics — 100% Complete</span>
+    <span class="hstat">✏️ 2-Mark Answers</span>
+    <span class="hstat">📝 6-Mark Answers</span>
+    <span class="hstat">📊 All Graphs</span>
+    <span class="hstat">🔢 All Formulas</span>
+  </div>
+  <div class="lang-wrap">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setL('en',this)">🇬🇧 English</button>
+      <button class="lang-btn" onclick="setL('hi',this)">🇮🇳 Hinglish</button>
+    </div>
+  </div>
+</div>
+
+<div class="ctrl">
+  <div class="sw"><span class="si">🔍</span>
+    <input type="text" id="search" placeholder="Search... (sigmoid, CNN, gradient, loss...)" oninput="render()">
+  </div>
+  <div class="filters">
+    <button class="fb active" onclick="setF('all',this)">All Topics</button>
+    <button class="fb" onclick="setF('ann',this)">ANN Basics</button>
+    <button class="fb" onclick="setF('activation',this)">Activations</button>
+    <button class="fb" onclick="setF('loss',this)">Loss Functions</button>
+    <button class="fb" onclick="setF('optimizer',this)">Optimizers</button>
+    <button class="fb" onclick="setF('cnn',this)">CNN</button>
+    <button class="fb" onclick="setF('extra',this)">Extra Topics</button>
+  </div>
+</div>
+
+<div class="content">
+  <div class="tc" id="tc"></div>
+  <div id="list"></div>
+</div>
+
+<script>
+let cL='en', cF='all', openCards={}, cTabs={};
+function setL(l,b){cL=l;document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()}
+function setF(f,b){cF=f;document.querySelectorAll('.fb').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()}
+function tog(id){openCards[id]=!openCards[id];render()}
+function setT(id,t,e){e.stopPropagation();cTabs[id]=t;render()}
+
+const T=[
+{id:1,title:"ANN — Artificial Neural Networks",cat:"ann",tags:["formula","graph"],sub:"Backpropagation, Marvin Minsky, John McCarthy, Claude Shannon",
+en:{
+two:`<p class="at">An Artificial Neural Network (ANN) is a computational model inspired by the biological brain. It processes data through layers of interconnected neurons, each computing a weighted sum of inputs plus bias, then applying an activation function.</p>
+<div class="fm"><span class="fl">Neuron output</span>y = f(Σ wᵢxᵢ + b)
+<span class="fl">Where</span>wᵢ = weights,  xᵢ = inputs,  b = bias,  f = activation function</div>
+<div class="notebox"><b>From your notes (09/01/2025):</b> Backpropagation was introduced by Marvin Minsky, John McCarthy, and Claude Shannon. "DL content Git: Push imp"</div>`,
+six:`<div class="st">Definition</div>
+<p class="at">An ANN consists of an Input Layer, Hidden Layers, and an Output Layer. Information flows forward (forward pass), loss is computed, then gradients flow backward (backpropagation) to update weights.</p>
+<div class="st">Key Formulas</div>
+<div class="fm"><span class="fl">Net input to neuron</span>X = w₁x₁ + w₂x₂ + w₃x₃ + b
+<span class="fl">Sigmoid activation (from your notes)</span>f(x) = 1 / (1 + e⁻ˣ)
+         = 1 / (1 + e⁻⁽ˣ¹ʷ¹⁺ˣ²ʷ²⁺ˣ³ʷ³⁺ᵇ⁾)
+<span class="fl">Predicted output</span>ŷ = f(X)    →  ŷ is predicted,  y is actual
+<span class="fl">Loss function (from your notes)</span>L(x) = ½ · (ŷ - y)²</div>
+<div class="st">DL vs ML (from your notes — Page 1 diagram)</div>
+<ul class="pl"><li>DL algorithm is divided into layers and small is here the dataset</li><li>DL Large / DL Mid / DL Small — different model sizes for different amounts of data</li><li>ML Algo uses: x, A, t, (not relu) → function input</li></ul>
+<svg class="gs" viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#4f8ef7" stroke-width="1.5"/></marker></defs>
+<text x="70" y="14" text-anchor="middle" fill="#546a8a" font-size="11" font-family="DM Sans">Input</text>
+<circle cx="70" cy="42" r="15" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="70" y="46" text-anchor="middle" fill="#93c5fd" font-size="10">x₁</text>
+<circle cx="70" cy="82" r="15" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="70" y="86" text-anchor="middle" fill="#93c5fd" font-size="10">x₂</text>
+<circle cx="70" cy="122" r="15" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="70" y="126" text-anchor="middle" fill="#93c5fd" font-size="10">x₃</text>
+<text x="230" y="14" text-anchor="middle" fill="#546a8a" font-size="11" font-family="DM Sans">Hidden</text>
+<circle cx="200" cy="35" r="15" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<circle cx="200" cy="82" r="15" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<circle cx="200" cy="129" r="15" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<circle cx="265" cy="55" r="15" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<circle cx="265" cy="109" r="15" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<line x1="85" y1="44" x2="185" y2="38" stroke="#1e3a5f" stroke-width="0.8"/><line x1="85" y1="82" x2="185" y2="82" stroke="#1e3a5f" stroke-width="0.8"/><line x1="85" y1="120" x2="185" y2="126" stroke="#1e3a5f" stroke-width="0.8"/>
+<line x1="85" y1="44" x2="185" y2="80" stroke="#1e3a5f" stroke-width="0.8"/><line x1="85" y1="82" x2="185" y2="38" stroke="#1e3a5f" stroke-width="0.8"/>
+<line x1="215" y1="38" x2="250" y2="55" stroke="#1e3a5f" stroke-width="0.8"/><line x1="215" y1="82" x2="250" y2="58" stroke="#1e3a5f" stroke-width="0.8"/><line x1="215" y1="82" x2="250" y2="106" stroke="#1e3a5f" stroke-width="0.8"/><line x1="215" y1="126" x2="250" y2="110" stroke="#1e3a5f" stroke-width="0.8"/>
+<text x="430" y="14" text-anchor="middle" fill="#546a8a" font-size="11" font-family="DM Sans">Output</text>
+<circle cx="430" cy="82" r="20" fill="#0d1220" stroke="#10b981" stroke-width="1.5"/><text x="430" y="87" text-anchor="middle" fill="#6ee7b7" font-size="11">ŷ</text>
+<line x1="280" y1="58" x2="410" y2="79" stroke="#4f8ef7" stroke-width="1" marker-end="url(#a0)"/>
+<line x1="280" y1="106" x2="410" y2="84" stroke="#4f8ef7" stroke-width="1" marker-end="url(#a0)"/>
+<text x="320" y="145" text-anchor="middle" fill="#546a8a" font-size="10" font-family="DM Sans">Forward pass →        ← Backpropagation</text>
+</svg>`},
+hi:{
+two:`<p class="at">ANN ek computational model hai jo biological brain se inspired hai. Yeh interconnected neurons ki layers se process karta hai. Har neuron weighted inputs leta hai, bias add karta hai, aur activation function apply karta hai.</p>
+<div class="fm"><span class="fl">Neuron output</span>y = f(Σ wᵢxᵢ + b)</div>
+<div class="notebox"><b>Tumhare notes se (09/01/2025):</b> Backpropagation ko Marvin Minsky, John McCarthy, aur Claude Shannon ne introduce kiya tha.</div>`,
+six:`<div class="st">Definition</div>
+<p class="at">ANN mein Input Layer, Hidden Layers, aur Output Layer hoti hain. Information forward jaati hai (forward pass), loss compute hoti hai, phir gradients backward propagate hote hain (backpropagation) — weights update karne ke liye.</p>
+<div class="st">Key Formulas</div>
+<div class="fm"><span class="fl">Net input (tumhare notes se)</span>X = w₁x₁ + w₂x₂ + w₃x₃ + b
+<span class="fl">Sigmoid activation</span>f(x) = 1 / (1 + e⁻ˣ)
+<span class="fl">Predicted output</span>ŷ = f(X)    →  ŷ = predicted,  y = actual
+<span class="fl">Loss function (tumhare notes se)</span>L(x) = ½ · (ŷ - y)²</div>
+<div class="st">DL vs ML (Page 1 diagram se)</div>
+<ul class="pl"><li>DL algorithm layers mein divided hota hai — dataset chhota hota hai</li><li>DL Large / DL Mid / DL Small — different model sizes</li></ul>`}
+},
+
+{id:2,title:"Naive Bayes Theorem",cat:"ann",tags:["formula"],sub:"P(A|B) = P(A∩B)/P(B) — from your notes Page 1",
+en:{
+two:`<p class="at">Naive Bayes is a probabilistic classifier based on Bayes' theorem with the assumption that all features are conditionally independent (the "naive" part).</p>
+<div class="fm"><span class="fl">From your notes exactly</span>P(A|B) = P(A∩B) / P(B)
+<span class="fl">Standard form</span>P(C|X) = P(X|C) · P(C) / P(X)
+<span class="fl">Naive assumption</span>P(X|C) = P(x₁|C) · P(x₂|C) · ... · P(xₙ|C)</div>`,
+six:`<div class="st">Bayes Theorem Components</div>
+<div class="fm"><span class="fl">Your notes formula</span>P(A|B) = P(A∩B) / P(B)
+<span class="fl">Posterior Probability</span>P(C|X) = [P(X|C) · P(C)] / P(X)
+P(C|X) = Posterior (class given features)
+P(X|C) = Likelihood
+P(C)   = Prior probability
+P(X)   = Evidence
+<span class="fl">Classification rule</span>ŷ = argmax_C [P(C) · Π P(xᵢ|C)]</div>
+<div class="st">Example from your notes — Student Pass/Fail dataset</div>
+<div class="fm"><span class="fl">Data (Page 3)</span>Sleep  Play  Study  | Pass/Fail
+  5     3     7    |   1 (Pass)
+  8     4     6    |   1 (Pass)
+  7     7     3    |   0 (Fail)</div>
+<ul class="pl"><li>Features: Sleep hrs, Play hrs, Study hrs</li><li>Target: Pass (1) or Fail (0)</li><li>Naive Bayes computes P(Pass|features) and P(Fail|features), predicts higher one</li></ul>`},
+hi:{
+two:`<p class="at">Naive Bayes ek probabilistic classifier hai jo Bayes' theorem par based hai. Yeh assume karta hai ki sabhi features conditionally independent hain — yahi "naive" assumption hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se exactly</span>P(A|B) = P(A∩B) / P(B)
+<span class="fl">Standard form</span>P(C|X) = P(X|C) · P(C) / P(X)</div>`,
+six:`<div class="st">Formula Components</div>
+<div class="fm"><span class="fl">Tumhare notes ka formula</span>P(A|B) = P(A∩B) / P(B)
+<span class="fl">Full form</span>P(C|X) = [P(X|C) · P(C)] / P(X)
+<span class="fl">Classification</span>ŷ = argmax_C [P(C) · Π P(xᵢ|C)]</div>
+<div class="st">Example — Student Pass/Fail (Page 3 se)</div>
+<div class="fm">Sleep | Play | Study | Pass/Fail
+  5   |  3   |  7   |   1 (Pass)
+  8   |  4   |  6   |   1 (Pass)
+  7   |  7   |  3   |   0 (Fail)</div>
+<ul class="pl"><li>Features: Sleep, Play, Study hours</li><li>Target: Pass (1) ya Fail (0)</li><li>Naive Bayes dono P(Pass|features) aur P(Fail|features) compute karta hai</li></ul>`}
+},
+
+{id:3,title:"Mathematical Foundation of Perceptron",cat:"ann",tags:["formula","graph"],sub:"Neuron diagram with w₁,w₂,w₃, bias, Σwᵢxᵢ, f(x) — Page 2",
+en:{
+two:`<p class="at">A Perceptron is a single-layer binary classifier. It computes a weighted sum of inputs plus bias, then applies a step/activation function to produce output 0 or 1.</p>
+<div class="fm"><span class="fl">From your notes (Page 2)</span>y = x₁w₁ + x₂w₂ + x₃w₃ + b  =  X
+<span class="fl">Activation</span>ŷ = f(X) = 1/(1+e⁻ˣ)   (Sigmoid)
+<span class="fl">Bias note from your notes</span>bias → to prevent neuron from being dead if x₁,x₂,x₃ = 0</div>`,
+six:`<div class="st">Perceptron Diagram (Page 2 & 3)</div>
+<svg class="gs" viewBox="0 0 580 200" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#4f8ef7" stroke-width="1.5"/></marker></defs>
+<circle cx="70" cy="60" r="18" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/>
+<text x="70" y="55" text-anchor="middle" fill="#546a8a" font-size="10">x₁</text>
+<text x="70" y="68" text-anchor="middle" fill="#93c5fd" font-size="10">w₁</text>
+<circle cx="70" cy="110" r="18" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/>
+<text x="70" y="105" text-anchor="middle" fill="#546a8a" font-size="10">x₂</text>
+<text x="70" y="118" text-anchor="middle" fill="#93c5fd" font-size="10">w₂</text>
+<circle cx="70" cy="160" r="18" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/>
+<text x="70" y="155" text-anchor="middle" fill="#546a8a" font-size="10">x₃</text>
+<text x="70" y="168" text-anchor="middle" fill="#93c5fd" font-size="10">w₃</text>
+<text x="200" y="20" text-anchor="middle" fill="#546a8a" font-size="10">bias ↓</text>
+<rect x="158" y="80" width="90" height="50" rx="8" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/>
+<text x="203" y="103" text-anchor="middle" fill="#c4b5fd" font-size="10">Σwᵢxᵢ</text>
+<text x="203" y="118" text-anchor="middle" fill="#546a8a" font-size="9">+b</text>
+<rect x="310" y="80" width="90" height="50" rx="8" fill="#0d1220" stroke="#22d3ee" stroke-width="1"/>
+<text x="355" y="103" text-anchor="middle" fill="#22d3ee" font-size="10">f(x)</text>
+<text x="355" y="118" text-anchor="middle" fill="#546a8a" font-size="9">1/(1+e⁻ˣ)</text>
+<circle cx="490" cy="105" r="22" fill="#0d1220" stroke="#10b981" stroke-width="1.5"/>
+<text x="490" y="102" text-anchor="middle" fill="#6ee7b7" font-size="12">ŷ</text>
+<text x="490" y="116" text-anchor="middle" fill="#546a8a" font-size="9">output</text>
+<line x1="88" y1="64" x2="157" y2="98" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="88" y1="110" x2="157" y2="105" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="88" y1="156" x2="157" y2="112" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="248" y1="105" x2="309" y2="105" stroke="#4f8ef7" stroke-width="1" marker-end="url(#ap)"/>
+<line x1="400" y1="105" x2="468" y2="105" stroke="#4f8ef7" stroke-width="1" marker-end="url(#ap)"/>
+<line x1="203" y1="80" x2="203" y2="28" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 2"/>
+<text x="215" y="26" fill="#f59e0b" font-size="9">bias</text>
+</svg>
+<div class="st">Key Formulas</div>
+<div class="fm"><span class="fl">Net input (from your notes)</span>X = w₁x₁ + w₂x₂ + w₃x₃ + b
+<span class="fl">Sigmoid output</span>Sigmoid ŷ = 1/(1+e⁻ˣ) = 1 / (1 + e⁻⁽ʷ¹ˣ¹⁺ʷ²ˣ²⁺ʷ³ˣ³⁺ᵇ⁾)
+<span class="fl">Sigmoid range</span>∈ (0, 1)
+<span class="fl">Loss function</span>L(x) = ½ · (ŷ - y)²    ← from your notes page 3</div>
+<div class="st">Perceptron Learning Rule</div>
+<div class="fm">wᵢ(new) = wᵢ(old) + η · (d - y) · xᵢ</div>
+<div class="tip"><b>From your notes (Page 3):</b> Bias is added to prevent neuron from being dead when x₁,x₂,x₃ = 0. If no bias, Σwᵢ·0 = 0 → dead neuron.</div>`},
+hi:{
+two:`<p class="at">Perceptron ek single-layer binary classifier hai. Weighted sum of inputs + bias compute karta hai, phir activation function apply karke 0 ya 1 output deta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 2)</span>y = x₁w₁ + x₂w₂ + x₃w₃ + b  =  X
+<span class="fl">Activation</span>ŷ = f(X) = 1/(1+e⁻ˣ)
+<span class="fl">Bias kyun?</span>x₁,x₂,x₃ = 0 hone par neuron ko dead hone se bachata hai</div>`,
+six:`<div class="st">Key Formulas</div>
+<div class="fm"><span class="fl">Net input (notes Page 2)</span>X = w₁x₁ + w₂x₂ + w₃x₃ + b
+<span class="fl">Sigmoid output</span>ŷ = 1 / (1 + e⁻ˣ)  = 1/(1+e⁻⁽ʷ¹ˣ¹⁺ʷ²ˣ²⁺ʷ³ˣ³⁺ᵇ⁾)
+<span class="fl">Range</span>Sigmoid ∈ (0, 1)
+<span class="fl">Loss function (Page 3)</span>L(x) = ½ · (ŷ - y)²</div>
+<div class="tip"><b>Notes se (Page 3):</b> Bias isliye add karte hain taki neuron dead na ho jab x₁,x₂,x₃ = 0 hon. Bina bias ke: Σwᵢ·0 = 0 → neuron dead.</div>`}
+},
+
+{id:4,title:"Neural Network Architecture — 3-Layer Design Problem",cat:"ann",tags:["formula","graph"],sub:"Nodes A-L, equations for E,F,G,H,I,J,K,L,Y — Pages 4-6",
+en:{
+two:`<p class="at">Neural network architecture refers to the design of layers, neurons, and connections. In a 3-hidden-layer network with 4 neurons each and a binary classification output, each neuron computes: Input_equation → Apply sigmoid → Output.</p>
+<div class="fm"><span class="fl">From your notes (Page 4)</span>Ein = x₁w₁ + x₂w₂ + x₃w₃ + x₄w₄ + b₁
+Eout = 1 / (1 + e⁻⁽ᴱⁱⁿ⁾)</div>`,
+six:`<div class="st">Full 3-Layer Network Equations (Pages 4–6)</div>
+<div class="fm"><span class="fl">Layer 1 — Nodes E, F, G, H (inputs: x₁,x₂,x₃,x₄, bias b₁)</span>Ein  = x₁w₁ + x₂w₂ + x₃w₃ + x₄w₄ + b₁
+Eout = 1 / (1 + e⁻⁽ᴱⁱⁿ⁾)
+
+Fin  = w₁x₁ + w₂x₂ + w₃x₃ + w₄x₄ + b₁
+Fout = 1 / (1 + e⁻⁽ᶠⁱⁿ⁾)
+
+Gin  = w₁x₁ + w₂x₂ + w₃x₃ + w₄x₄ + b₁
+Gout = 1 / (1 + e⁻⁽ᴳⁱⁿ⁾)
+
+Hin  = w₁x₁ + w₂x₂ + w₃x₃ + w₄x₄ + b₁
+Hout = 1 / (1 + e⁻⁽ᴴⁱⁿ⁾)
+<span class="fl">Layer 2 — Nodes I, J, K, L (inputs: Eout,Fout,Gout,Hout, bias b₂)</span>Iin  = Eout·w₅ + Fout·w₆ + Gout·w₇ + Hout·w₈ + b₂
+Iout = 1 / (1 + e⁻⁽ᴵⁱⁿ⁾)
+
+Jin  = Eout·w₅ + Fout·w₆ + Gout·w₇ + Hout·w₈ + b₂
+Jout = 1 / (1 + e⁻⁽ᴶⁱⁿ⁾)
+
+Kin  = w₅·Eout + w₆·Fout + w₇·Gout + w₈·Hout + b₂
+Kout = 1 / (1 + e⁻⁽ᴷⁱⁿ⁾)
+
+Lin  = w₅·Eout + w₆·Fout + w₇·Gout + w₈·Hout + b₂
+Lout = 1 / (1 + e⁻⁽ᴸⁱⁿ⁾)
+<span class="fl">Final Output Y (Page 6)</span>Yin  = w₉·Iout + w₁₀·Jout + w₁₁·Kout + w₁₂·Lout + b₃
+Yout = 1 / (1 + e⁻⁽ʸⁱⁿ⁾)
+
+ŷ → predicted o/p
+y → actual o/p
+Loss = |y - ŷ|</div>
+<div class="tip"><b>Remember from notes:</b> Wₙₑᵥᵥ = Wₒₗᵈ – η(∂Loss/∂x) where η = 0.0001 (optimum value)</div>`},
+hi:{
+two:`<p class="at">Neural network architecture mein layers, neurons aur connections ka design hota hai. 3-hidden-layer network mein har neuron: net input compute karta hai → sigmoid apply karta hai → output deta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 4)</span>Ein  = x₁w₁ + x₂w₂ + x₃w₃ + x₄w₄ + b₁
+Eout = 1 / (1 + e⁻⁽ᴱⁱⁿ⁾)</div>`,
+six:`<div class="st">Full 3-Layer Network Equations (Pages 4–6)</div>
+<div class="fm"><span class="fl">Layer 1 — E, F, G, H (b₁ bias)</span>Ein=x₁w₁+x₂w₂+x₃w₃+x₄w₄+b₁  Eout=1/(1+e⁻ᴱⁱⁿ)
+Fin=w₁x₁+w₂x₂+w₃x₃+w₄x₄+b₁  Fout=1/(1+e⁻ᶠⁱⁿ)
+Gin=...same...  Gout=1/(1+e⁻ᴳⁱⁿ)
+Hin=...same...  Hout=1/(1+e⁻ᴴⁱⁿ)
+<span class="fl">Layer 2 — I, J, K, L (b₂ bias)</span>Iin=Eout·w₅+Fout·w₆+Gout·w₇+Hout·w₈+b₂
+Iout=1/(1+e⁻ᴵⁱⁿ)  ... same for J, K, L
+<span class="fl">Final Output Y</span>Yin=w₉·Iout+w₁₀·Jout+w₁₁·Kout+w₁₂·Lout+b₃
+Yout=1/(1+e⁻ʸⁱⁿ)
+Loss = |y - ŷ|</div>`}
+},
+
+{id:5,title:"Weight Updation & Gradient Descent",cat:"optimizer",tags:["formula","graph"],sub:"Wₙₑᵥᵥ = Wₒₗᵈ - η(∂Loss/∂x), obtuse/acute angle — Page 7",
+en:{
+two:`<p class="at">Weight updation is the process of adjusting weights to minimize the loss function. The gradient (slope of loss curve) tells us which direction to move. Learning rate η controls step size.</p>
+<div class="fm"><span class="fl">From your notes (Page 7)</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss / ∂x)
+                            ↑             ↑
+                      learning rate    gradient
+η = 0.0001 (optimum value)</div>`,
+six:`<div class="st">Weight Update Rule</div>
+<div class="fm"><span class="fl">General formula</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss/∂x)
+η = 0.0001 (optimum value from your notes)</div>
+<div class="st">Obtuse vs Acute Angle (from your notes Page 7)</div>
+<div class="two-col">
+<div class="mini-card"><div class="mc-title">When θ = Obtuse</div>
+<div class="fm" style="font-size:11px;margin:4px 0">tan θ = -ve = (∂Loss/∂x)
+-η(∂Loss/∂x) = +ve
+Wₙₑᵥᵥ ↑ increases
+Wₙₑᵥᵥ > Wₒₗᵈ</div></div>
+<div class="mini-card"><div class="mc-title">When θ = Acute</div>
+<div class="fm" style="font-size:11px;margin:4px 0">tan θ = +ve = (∂Loss/∂x)
+-η(∂Loss/∂x) = -ve
+Wₙₑᵥᵥ ↓ decreases
+Wₙₑᵥᵥ < Wₒₗᵈ</div></div>
+</div>
+<svg class="gs" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="140" x2="460" y2="140" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="20" x2="40" y2="140" stroke="#1e3a5f" stroke-width="1"/>
+<text x="465" y="144" fill="#546a8a" font-size="10">weight</text>
+<text x="28" y="24" fill="#546a8a" font-size="10">Loss</text>
+<path d="M60 38 Q200 145 290 148 Q380 145 440 38" fill="none" stroke="#1e3a5f" stroke-width="1.2" opacity="0.6"/>
+<circle cx="130" cy="100" r="6" fill="#ef4444"/>
+<circle cx="200" cy="132" r="6" fill="#ef4444"/>
+<circle cx="265" cy="146" r="6" fill="#ef4444"/>
+<circle cx="295" cy="148" r="6" fill="#10b981"/>
+<line x1="130" y1="100" x2="198" y2="131" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2"/>
+<line x1="200" y1="132" x2="263" y2="145" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2"/>
+<line x1="265" y1="146" x2="293" y2="148" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2"/>
+<text x="118" y="90" fill="#ef4444" font-size="9">P₁</text>
+<text x="285" y="142" fill="#10b981" font-size="9">min</text>
+<text x="170" y="160" fill="#546a8a" font-size="9">← gradient steps (η controls size) →</text>
+</svg>
+<div class="st">Epoch Definition (from your notes Page 20)</div>
+<p class="at">1 epoch = 1 Forward pass + 1 Backward pass</p>
+<div class="fm"><span class="fl">Full update</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss / ∂Wₒₗᵈ)</div>`},
+hi:{
+two:`<p class="at">Weight updation mein weights ko adjust kiya jaata hai loss minimize karne ke liye. Gradient (loss curve ka slope) direction batata hai. Learning rate η step size control karta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 7)</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss/∂x)
+η = 0.0001 (optimum value)</div>`,
+six:`<div class="st">Weight Update Rule</div>
+<div class="fm">Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss/∂x)
+η = 0.0001 (optimum value)</div>
+<div class="st">Obtuse vs Acute Angle (Page 7 se)</div>
+<div class="two-col">
+<div class="mini-card"><div class="mc-title">θ = Obtuse hone par</div><div class="fm" style="font-size:11px;margin:4px 0">tan θ = -ve → -η·(∂L/∂x) = +ve
+Wₙₑᵥᵥ > Wₒₗᵈ  (weight badhta hai)</div></div>
+<div class="mini-card"><div class="mc-title">θ = Acute hone par</div><div class="fm" style="font-size:11px;margin:4px 0">tan θ = +ve → -η·(∂L/∂x) = -ve
+Wₙₑᵥᵥ < Wₒₗᵈ  (weight ghatta hai)</div></div>
+</div>`}
+},
+
+{id:6,title:"Vanishing Gradient Problem",cat:"ann",tags:["formula","graph"],sub:"Sigmoid derivative → 0, network stops learning — Page 8",
+en:{
+two:`<p class="at">During backpropagation in deep networks, gradients become exponentially small in earlier layers. The sigmoid derivative stays between 0 and 1, so multiplying many such values causes the gradient to vanish — Wₙₑᵥᵥ ≈ Wₒₗᵈ, and the network stops learning.</p>
+<div class="fm"><span class="fl">From your notes (Page 8)</span>∂Loss/∂Wₙₑᵥᵥ = (L/O₅₁)(O₅₁/O₄₁)(O₄₁/O₃₁)(O₃₁/O₂₁)(O₂₁/Wₙₑᵥᵥ)
+Since value is b/w 0 to 1, derivatives keep getting smaller
+→ Wₙₑᵥᵥ ≈ Wₒₗᵈ → NN stops working, accuracy remains same</div>`,
+six:`<div class="st">Cause (from your notes Page 8)</div>
+<div class="fm"><span class="fl">Chain of gradients</span>∂Loss/∂Wₙₑᵥᵥ = (L/O₅₁)·(O₅₁/O₄₁)·(O₄₁/O₃₁)·(O₃₁/O₂₁)·(O₂₁/Wₙₑᵥᵥ)
+<span class="fl">Wₙₑᵥᵥ update</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · ∂Loss/∂Wₒₗᵈ</div>
+<svg class="gs" viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg">
+<text x="40" y="18" fill="#546a8a" font-size="10" font-family="DM Sans">Vanishing Gradient — signal fades as it flows back</text>
+<rect x="30" y="35" width="70" height="30" rx="6" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="65" y="55" text-anchor="middle" fill="#93c5fd" font-size="10">A</text>
+<rect x="130" y="35" width="70" height="30" rx="6" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="165" y="55" text-anchor="middle" fill="#93c5fd" font-size="10">B</text>
+<rect x="230" y="35" width="70" height="30" rx="6" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="265" y="55" text-anchor="middle" fill="#93c5fd" font-size="10">C</text>
+<rect x="330" y="35" width="70" height="30" rx="6" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="365" y="55" text-anchor="middle" fill="#93c5fd" font-size="10">D</text>
+<rect x="430" y="35" width="70" height="30" rx="6" fill="#0d1220" stroke="#10b981" stroke-width="1"/><text x="465" y="55" text-anchor="middle" fill="#6ee7b7" font-size="10">O/P</text>
+<line x1="100" y1="50" x2="128" y2="50" stroke="#4f8ef7" stroke-width="1"/><line x1="200" y1="50" x2="228" y2="50" stroke="#4f8ef7" stroke-width="1"/>
+<line x1="300" y1="50" x2="328" y2="50" stroke="#4f8ef7" stroke-width="1"/><line x1="400" y1="50" x2="428" y2="50" stroke="#4f8ef7" stroke-width="1"/>
+<text x="65" y="90" text-anchor="middle" fill="#ef4444" font-size="9">≈0</text>
+<text x="165" y="90" text-anchor="middle" fill="#ef4444" font-size="9">≈0.001</text>
+<text x="265" y="90" text-anchor="middle" fill="#f59e0b" font-size="9">≈0.05</text>
+<text x="365" y="90" text-anchor="middle" fill="#f59e0b" font-size="9">≈0.25</text>
+<text x="465" y="90" text-anchor="middle" fill="#10b981" font-size="9">gradient</text>
+<text x="280" y="112" text-anchor="middle" fill="#ef4444" font-size="10" font-family="DM Sans">← Gradient vanishes in early layers</text>
+<path d="M465 92 Q300 110 65 92" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 2"/>
+</svg>
+<div class="st">Notes Quote (Page 8)</div>
+<p class="at">"Since value is b/w 0 to 1, so derivatives keeps getting smaller. It tends to become so small that it is negligible and there remains almost no difference when weight is updated to Wₙₑᵥᵥ. Thus Wₙₑᵥᵥ ≈ Wₒₗᵈ. Neural Network stops working and Accuracy remains same."</p>
+<div class="st">Solutions</div>
+<ul class="pl"><li>✅ Use <b>ReLU</b> instead of sigmoid/tanh</li><li>✅ <b>Tanh</b> — max gradient = 1, much better</li><li>✅ <b>Batch Normalization</b></li><li>✅ <b>Residual Connections</b> (ResNet)</li></ul>`},
+hi:{
+two:`<p class="at">Deep networks mein backprop ke dauran earlier layers mein gradients exponentially chhote ho jaate hain. Sigmoid derivative 0-1 ke beech hota hai — bahut zyada multiply karne par vanish ho jaata hai → Wₙₑᵥᵥ ≈ Wₒₗᵈ → network sikhna band kar deta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 8)</span>∂Loss/∂Wₙₑᵥᵥ = (L/O₅₁)(O₅₁/O₄₁)(O₄₁/O₃₁)(O₃₁/O₂₁)(O₂₁/Wₙₑᵥᵥ)
+Values 0 to 1 ke beech → multiply karte karte ≈ 0 ho jaata hai</div>`,
+six:`<div class="st">Kya hota hai (Page 8 se)</div>
+<p class="at">Sigmoid derivative max 0.25 hota hai. Deep network mein 10 layers ke liye: 0.25¹⁰ ≈ 0.000001 → vanish ho jaata hai. NN sikhna band kar deta hai, accuracy same rehti hai.</p>
+<div class="fm"><span class="fl">Chain of gradients</span>∂Loss/∂Wₙₑᵥᵥ = (L/O₅₁)·(O₅₁/O₄₁)·(O₄₁/O₃₁)·(O₃₁/O₂₁)·(O₂₁/Wₙₑᵥᵥ)</div>
+<div class="st">Solutions</div>
+<ul class="pl"><li>✅ Sigmoid ki jagah <b>ReLU</b> use karo</li><li>✅ <b>Tanh</b> — max gradient = 1, better hai</li><li>✅ <b>Batch Normalization</b></li><li>✅ <b>Residual Connections</b> (ResNet)</li></ul>`}
+},
+
+{id:7,title:"Chain Rule of Derivative",cat:"ann",tags:["formula"],sub:"Path 1 + Path 2 through multiple routes — Page 9",
+en:{
+two:`<p class="at">The chain rule states that for a composite function, the derivative is the product of derivatives at each step. It is the mathematical foundation of backpropagation — errors are propagated through every path in the network.</p>
+<div class="fm"><span class="fl">General chain rule</span>∂Loss/∂W₄ₒₗᵈ = (∂Loss/∂O₂) × (∂O₂/∂W₄)</div>`,
+six:`<div class="st">Chain Rule — Multiple Paths (Page 9)</div>
+<div class="fm"><span class="fl">Path 1</span>∂Loss/∂W₁ₒₗᵈ = ∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₁ × ∂O₂₁/∂O₁₁ × ∂O₁₁/∂W₁ₒₗᵈ
+<span class="fl">Path 2</span>∂Loss/∂W₁ₒₗᵈ = ∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₂ × ∂O₂₂/∂O₁₁ × ∂O₁₁/∂W₁ₒₗᵈ
+<span class="fl">Path 1 + Path 2 (from your notes)</span>= (∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₁ × ∂O₂₁/∂O₁₁/∂W₁) +
+  (∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₂ × ∂O₂₂/∂O₁₁ × ∂O₁₁/∂W₁)</div>
+<div class="tip"><b>Intuition:</b> When multiple paths lead from a weight to the output, all paths contribute to the gradient. You ADD all path contributions together.</div>`},
+hi:{
+two:`<p class="at">Chain rule kehta hai: composite function ka derivative, har step ke derivatives ka product hota hai. Yeh backpropagation ka mathematical base hai.</p>
+<div class="fm"><span class="fl">General chain rule</span>∂Loss/∂W₄ₒₗᵈ = (∂Loss/∂O₂) × (∂O₂/∂W₄)</div>`,
+six:`<div class="st">Multiple Paths (Page 9 se)</div>
+<div class="fm"><span class="fl">Path 1</span>∂Loss/∂W₁ₒₗᵈ = ∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₁ × ∂O₂₁/∂O₁₁ × ∂O₁₁/∂W₁ₒₗᵈ
+<span class="fl">Path 2</span>∂Loss/∂W₁ₒₗᵈ = ∂Loss/∂O₃₁ × ∂O₃₁/∂O₂₂ × ∂O₂₂/∂O₁₁ × ∂O₁₁/∂W₁ₒₗᵈ
+<span class="fl">Total = Path1 + Path2</span>Dono paths ke contributions add ho jaate hain</div>
+<div class="tip"><b>Intuition:</b> Jab ek weight se output tak multiple paths hon, sabhi paths ka gradient add hota hai.</div>`}
+},
+
+{id:8,title:"Sigmoid Activation Function",cat:"activation",tags:["formula","graph"],sub:"f(x) = 1/(1+e⁻ˣ), advantages/disadvantages — Pages 10-11",
+en:{
+two:`<p class="at">Sigmoid squashes any input to (0,1). It is an S-shaped smooth curve. At x=0, output = 0.5. Used in output layers for binary classification.</p>
+<div class="fm"><span class="fl">From your notes (Page 10)</span>f(x) = 1 / (1 + e⁻ˣ)
+Derivative of Sigmoid: f'(x) = f(x)·(1-f(x))    max = 0.25 at x=0
+Range: (0,1)    f(0) = 0.5</div>`,
+six:`<div class="st">Formula & Derivative</div>
+<div class="fm">f(x) = 1 / (1 + e⁻ˣ)
+Derivative: σ'(x) = σ(x)·(1-σ(x))    Peak at x=0 → 0.5·0.5 = 0.25
+Range: (0,1)</div>
+<svg class="gs" viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="90" x2="460" y2="90" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="250" y1="18" x2="250" y2="168" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="25" x2="460" y2="25" stroke="#1e3a5f" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.5"/>
+<text x="35" y="29" text-anchor="end" fill="#546a8a" font-size="10">1</text>
+<text x="35" y="94" text-anchor="end" fill="#546a8a" font-size="10">0.5</text>
+<text x="35" y="168" text-anchor="end" fill="#546a8a" font-size="10">0</text>
+<text x="465" y="94" fill="#546a8a" font-size="10">x</text>
+<text x="256" y="17" fill="#546a8a" font-size="10">σ(x)</text>
+<path d="M60 160 Q100 159 150 153 Q200 144 230 125 Q248 108 252 92 Q268 72 296 48 Q330 30 380 26 Q420 25 450 25" fill="none" stroke="#4f8ef7" stroke-width="2.5"/>
+<path d="M60 90 Q100 90 140 88 Q180 84 220 82 Q240 87 250 90 Q265 88 290 78 Q340 60 400 56 Q430 55 450 55" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4 2"/>
+<text x="410" y="22" fill="#4f8ef7" font-size="11" font-family="DM Sans" font-weight="600">σ(x)</text>
+<text x="400" y="52" fill="#22d3ee" font-size="10" font-family="DM Sans">σ'(x)</text>
+<circle cx="250" cy="90" r="4" fill="#4f8ef7"/>
+<text x="258" y="88" fill="#546a8a" font-size="9">0.5</text>
+</svg>
+<div class="st">Advantages (from your notes Page 11)</div>
+<ul class="pl"><li>(i) Smooth gradient — preventing jumps in the output value (continuous graph)</li><li>(ii) Output value lies between 0 and 1, normalizing the output of each neuron</li><li>(iii) It is generally used in regression</li></ul>
+<div class="st">Disadvantages (from your notes Page 11)</div>
+<ul class="pl"><li>(i) It faces the <b>vanishing gradient problem</b></li><li>(ii) Function output is not zero-centred — +ve and -ve values combined should tend to zero</li><li>(iii) Power operations are time consuming</li></ul>`},
+hi:{
+two:`<p class="at">Sigmoid kisi bhi input ko (0,1) mein squash karta hai. S-shaped smooth curve hai. x=0 par output = 0.5. Binary classification output layer mein use hota hai.</p>
+<div class="fm"><span class="fl">Formula (Page 10 se)</span>f(x) = 1 / (1 + e⁻ˣ)
+Derivative: σ'(x) = σ(x)·(1-σ(x))    max = 0.25 at x=0</div>`,
+six:`<div class="st">Formula & Derivative</div>
+<div class="fm">f(x) = 1 / (1 + e⁻ˣ)
+σ'(x) = σ(x)·(1-σ(x))    Peak = 0.25 at x=0
+Range: (0,1)</div>
+<div class="st">Advantages (Page 11 se)</div>
+<ul class="pl"><li>(i) Smooth gradient — output mein jumps nahi hote (continuous graph)</li><li>(ii) Output 0-1 ke beech — har neuron ka output normalize hota hai</li><li>(iii) Generally regression mein use hota hai</li></ul>
+<div class="st">Disadvantages (Page 11 se)</div>
+<ul class="pl"><li>(i) <b>Vanishing gradient problem</b> hoti hai</li><li>(ii) Output zero-centred nahi — +ve aur -ve values ka combination 0 hona chahiye</li><li>(iii) Power operations time-consuming hain</li></ul>`}
+},
+
+{id:9,title:"Tanh Activation Function",cat:"activation",tags:["formula","graph"],sub:"f(x)=(eˣ-e⁻ˣ)/(eˣ+e⁻ˣ), range (-1,+1), no vanishing gradient — Page 12",
+en:{
+two:`<p class="at">Tanh maps input to (-1,+1). It is zero-centered, unlike sigmoid. The maximum gradient = 1 (not 0.25 like sigmoid), so no vanishing gradient when using tanh with backpropagation.</p>
+<div class="fm"><span class="fl">From your notes (Page 12)</span>f(x) = (eˣ - e⁻ˣ) / (eˣ + e⁻ˣ)
+Range: (-1, +1)    Derivative range: (0, 1)    Max gradient = 1</div>`,
+six:`<div class="st">Formula & Derivative</div>
+<div class="fm"><span class="fl">Tanh (from your notes)</span>f(x) = (eˣ - e⁻ˣ) / (eˣ + e⁻ˣ)
+<span class="fl">Derivative</span>f'(x) = 1 - tanh²(x)    Max = 1 at x=0
+<span class="fl">Range</span>(-1, +1)    Derivative range: (0, 1)</div>
+<svg class="gs" viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="90" x2="460" y2="90" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="250" y1="18" x2="250" y2="168" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="25" x2="460" y2="25" stroke="#1e3a5f" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.5"/>
+<line x1="40" y1="155" x2="460" y2="155" stroke="#1e3a5f" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.5"/>
+<text x="35" y="29" text-anchor="end" fill="#546a8a" font-size="10">+1</text>
+<text x="35" y="159" text-anchor="end" fill="#546a8a" font-size="10">-1</text>
+<text x="465" y="94" fill="#546a8a" font-size="10">x</text>
+<path d="M60 152 Q100 150 140 140 Q185 125 215 110 Q240 98 250 90 Q262 82 285 70 Q320 52 365 34 Q400 26 450 25" fill="none" stroke="#10b981" stroke-width="2.5"/>
+<path d="M80 90 Q120 90 160 88 Q200 88 230 92 Q250 92 270 88 Q300 82 340 72 Q380 62 430 58" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4 2"/>
+<text x="400" y="23" fill="#10b981" font-size="11" font-family="DM Sans" font-weight="600">tanh</text>
+<text x="395" y="54" fill="#22d3ee" font-size="10" font-family="DM Sans">tanh'</text>
+</svg>
+<div class="st">From your notes (Page 12-13)</div>
+<p class="at">"tanh activation function will lie in the range of (-1,+1). Further the value of the derivative of tanh activation function will lie in the range of (0,1). The maximum value of the gradient is equal to 1."</p>
+<p class="at">"When we are using the back propagation with chain rule of derivative, it does not produce any smaller value like earlier one. Hence the Wₙₑᵥᵥ is different from Wₒₗᵈ — which implies weights are continuously updating the values. As a result loss is getting minimized and accuracy is getting maximized. <b>It means there is no vanishing gradient problem when we are using tanh activation function.</b>"</p>`},
+hi:{
+two:`<p class="at">Tanh input ko (-1,+1) mein map karta hai. Zero-centered hai (sigmoid se better). Maximum gradient = 1 — vanishing gradient problem nahi hoti jab tanh use karo.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 12)</span>f(x) = (eˣ - e⁻ˣ) / (eˣ + e⁻ˣ)
+Range: (-1, +1)    Max gradient = 1</div>`,
+six:`<div class="st">Formula</div>
+<div class="fm">f(x) = (eˣ - e⁻ˣ) / (eˣ + e⁻ˣ)
+f'(x) = 1 - tanh²(x)    Max = 1 at x=0
+Range: (-1, +1)</div>
+<div class="st">Notes se key point (Page 13)</div>
+<p class="at">"Tanh ke saath backprop mein vanishing gradient nahi hoti — kyunki max derivative = 1 hai, smaller values nahi banti. Isliye Wₙₑᵥᵥ ≠ Wₒₗᵈ hota hai, weights continuously update hote hain, loss minimize hoti hai aur accuracy maximize hoti hai."</p>`}
+},
+
+{id:10,title:"ReLU & Parametric ReLU",cat:"activation",tags:["formula","graph"],sub:"max(0,x), dead neuron, max(0.01x,x), max(α*x,x) — Pages 13-15",
+en:{
+two:`<p class="at">ReLU outputs 0 for negative inputs and x for positive. Computationally the simplest activation — only linear computation, faster convergence than sigmoid/tanh. Dead neuron problem: negative input → permanently 0.</p>
+<div class="fm"><span class="fl">From your notes (Page 13)</span>ReLU(x) = max(0, x)
+If x is -ve then ReLU(x) = 0
+<span class="fl">Parametric ReLU (Page 14-15)</span>f(x) = max(0.01x, x)    ← Leaky ReLU
+Parametric ReLU f(x) = max(α*x, x)   ← α is learned</div>`,
+six:`<div class="st">ReLU Formula & Graph</div>
+<div class="fm">ReLU(x) = max(0, x)
+Derivative: 1 if x > 0,  else  0
+Range: [0, ∞)</div>
+<svg class="gs" viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="140" x2="460" y2="140" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="250" y1="20" x2="250" y2="158" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="60" y1="140" x2="250" y2="140" stroke="#f59e0b" stroke-width="3"/>
+<line x1="250" y1="140" x2="430" y2="30" stroke="#f59e0b" stroke-width="3"/>
+<text x="345" y="65" fill="#f59e0b" font-size="11" font-family="DM Sans" font-weight="600">f(x)=x</text>
+<text x="90" y="130" fill="#f59e0b" font-size="11" font-family="DM Sans" font-weight="600">f(x)=0</text>
+<line x1="60" y1="158" x2="250" y2="140" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="5 3"/>
+<line x1="250" y1="140" x2="430" y2="30" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="70" y="172" fill="#22d3ee" font-size="10" font-family="DM Sans">Leaky/PReLU (slope α)</text>
+<circle cx="250" cy="140" r="5" fill="#f59e0b"/>
+<text x="36" y="144" text-anchor="end" fill="#546a8a" font-size="10">0</text>
+</svg>
+<div class="st">Advantages (from your notes Page 13-14)</div>
+<ul class="pl"><li>Takes only linear computation — fastest activation function</li><li>Convergence more quicker than sigmoid and tanh</li><li>No vanishing gradient for positive values</li></ul>
+<div class="st">Disadvantages (from your notes Page 14)</div>
+<p class="at">"When the input is negative, ReLU completely becomes inactive which means if any negative number is input in the network then that neuron will become a dead neuron."</p>
+<div class="st">Parametric ReLU (Page 15)</div>
+<div class="fm"><span class="fl">Leaky ReLU</span>f(x) = max(0.01x, x)
+<span class="fl">Parametric ReLU</span>f(x) = max(α*x, x)     ← α is a learnable parameter
+"The dead neuron problem will be solved with the help of updated ReLU function in which 0 is replaced by 0.01x"</div>
+<div class="st">Which activation to use? (Page 15)</div>
+<ul class="pl"><li><b>Binary classification:</b> ReLU in hidden layers + Sigmoid in output layer</li><li><b>Multiclass classification:</b> ReLU on hidden layers + Softmax on output layer</li><li><b>Regression:</b> ReLU on hidden layers + any linear activation fn on output layer</li></ul>`},
+hi:{
+two:`<p class="at">ReLU negative inputs ke liye 0, positive ke liye x return karta hai. Sirf linear computation — sigmoid/tanh se faster convergence. Dead neuron problem: negative input → permanently 0 output.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 13)</span>ReLU(x) = max(0, x)
+If x is -ve then ReLU(x) = 0
+<span class="fl">Parametric ReLU (Page 14-15)</span>f(x) = max(α*x, x)   (α learned hota hai)</div>`,
+six:`<div class="st">Advantages (Page 13-14 se)</div>
+<ul class="pl"><li>Sirf linear computation — sabse fast activation function</li><li>Sigmoid aur tanh se zyada quick convergence</li><li>Positive values ke liye vanishing gradient nahi</li></ul>
+<div class="st">Disadvantages (Page 14 se)</div>
+<p class="at">"Jab input negative hota hai, ReLU completely inactive ho jaata hai — agar koi bhi negative number input ho, woh neuron dead neuron ban jaata hai."</p>
+<div class="st">Kaunsa activation use karein? (Page 15 se)</div>
+<ul class="pl"><li><b>Binary classification:</b> Hidden → ReLU, Output → Sigmoid</li><li><b>Multiclass:</b> Hidden → ReLU, Output → Softmax</li><li><b>Regression:</b> Hidden → ReLU, Output → Linear</li></ul>`}
+},
+
+{id:11,title:"Softmax Activation Function",cat:"activation",tags:["formula"],sub:"f(x) = eˣⁱ/Σeˣⁱ, multiclass classification — Page 15",
+en:{
+two:`<p class="at">Softmax converts raw scores (logits) into probabilities that sum to 1. Used in output layer for multiclass classification problems (car, bus, cycle, truck, bike etc.).</p>
+<div class="fm"><span class="fl">From your notes (Page 15)</span>f(x) = eˣⁱ / Σ(i=1 to k) eˣⁱ
+Σ outputs = 1    (probabilities)</div>`,
+six:`<div class="st">Formula</div>
+<div class="fm"><span class="fl">From your notes (Page 15 & 20)</span>O(z) = eᶻⁱ / Σ(j=1 to k) eᶻʲ
+<span class="fl">Example from notes</span>Multiclass: car, bus, cycle, truck, bike
+→ Softmax outputs probability for each class</div>
+<div class="st">Usage rules (from your notes Page 15)</div>
+<ul class="pl"><li>Binary classification: ReLU (hidden) + <b>Sigmoid</b> (output)</li><li>Multiclass: ReLU (hidden) + <b>Softmax</b> (output)</li><li>Regression: ReLU (hidden) + <b>Linear</b> (output)</li></ul>
+<div class="tip"><b>Always paired with:</b> Categorical Cross-Entropy loss.</div>`},
+hi:{
+two:`<p class="at">Softmax raw scores ko probabilities mein convert karta hai jinka sum 1 hota hai. Multiclass classification output layer mein use hota hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 15)</span>f(x) = eˣⁱ / Σ(i=1 to k) eˣⁱ
+Example: car, bus, cycle, truck, bike</div>`,
+six:`<div class="st">Formula</div>
+<div class="fm">O(z) = eᶻⁱ / Σ(j=1 to k) eᶻʲ
+Sabhi outputs ka sum = 1</div>
+<div class="tip"><b>Hamesha saath use hota hai:</b> Categorical Cross-Entropy loss.</div>`}
+},
+
+{id:12,title:"Loss Functions — MSE, MAE, Huber",cat:"loss",tags:["formula","graph"],sub:"½(y-ŷ)², ½|y-ŷ|, MSE+MAE combination — Pages 16-18",
+en:{
+two:`<p class="at">Loss functions measure how wrong the model's prediction is. MSE squares the error (sensitive to outliers), MAE takes absolute value (robust), Huber combines both.</p>
+<div class="fm"><span class="fl">From your notes exactly</span>Loss f(n) = ½(y - ŷ)²       → specific for one data record
+Cost f(n) = (1/2n) Σᵢ(y - ŷ)²   → n = batch size, for a batch</div>`,
+six:`<div class="st">MSE — Mean Squared Error (Page 16)</div>
+<div class="fm">Loss f(n) = ½(y - ŷ)²         (one record)
+Cost f(n) = (1/2n) Σᵢ(y-ŷ)²     (batch, n=batch size)
+Quadratic equation (parabola shape)</div>
+<div class="st">Advantages of MSE (from your notes)</div>
+<ul class="pl"><li>1. Differentiable for all values of x</li><li>2. It achieves only one global minima</li><li>3. Convergence rate is faster</li></ul>
+<div class="st">Disadvantage of MSE</div>
+<p class="at">If any outliers present in the dataset, the line of regression shows major deviation from the actual line of regression which should be avoided for robustness of the model.</p>
+<div class="st">MAE — Mean Absolute Error (Page 17)</div>
+<div class="fm"><span class="fl">From your notes</span>Loss f(n) = ½|y - ŷ|
+y₁ = |x|         (V-shape at origin)
+y₂ = |x| + 5     (V-shape shifted up)
+y₃ = |x + 5|     (V-shape shifted left)</div>
+<p class="at">MAE will provide the advantage of no deviation from the line of regression even when outliers are present. But the MAE graph can be discontinuous and non-differentiable for few points.</p>
+<div class="st">Huber Loss (Page 18)</div>
+<div class="fm"><span class="fl">Combination of MSE + MAE</span>Loss = ½(y-ŷ)²             if outliers not there, |y-ŷ| ≤ δ
+Loss = δ|y-ŷ| - ½δ²       if outliers are there
+δ is a hyperparameter</div>`},
+hi:{
+two:`<p class="at">Loss functions measure karti hain ki model ki prediction kitni galat hai. MSE squared error leta hai (outliers sensitive), MAE absolute value (robust), Huber dono combine karta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se exactly</span>Loss f(n) = ½(y - ŷ)²       → single data record
+Cost f(n) = (1/2n) Σᵢ(y-ŷ)²  → batch ke liye</div>`,
+six:`<div class="st">MSE (Page 16 se)</div>
+<div class="fm">Loss = ½(y-ŷ)²    Cost = (1/2n) Σ(y-ŷ)²</div>
+<div class="st">MSE Advantages</div>
+<ul class="pl"><li>1. Sabhi values ke liye differentiable</li><li>2. Sirf ek global minima achieve karta hai</li><li>3. Convergence rate faster hai</li></ul>
+<div class="st">MAE (Page 17 se)</div>
+<div class="fm">Loss = ½|y - ŷ|
+Outliers present hone par bhi regression line deviate nahi hoti</div>
+<div class="st">Huber Loss (Page 18 se)</div>
+<div class="fm">Loss = ½(y-ŷ)²         if |y-ŷ| ≤ δ  (no outliers)
+Loss = δ|y-ŷ| - ½δ²    if outliers hain
+δ = hyperparameter</div>`}
+},
+
+{id:13,title:"Binary & Categorical Cross-Entropy",cat:"loss",tags:["formula"],sub:"Classification loss functions — Pages 18-19",
+en:{
+two:`<p class="at">Cross-entropy measures how well predicted probabilities match true labels. Binary CE for 2-class, Categorical CE for multi-class.</p>
+<div class="fm"><span class="fl">From your notes (Page 19)</span>Binary CE: loss = -y*log(ŷ) - (1-y)·log(1-ŷ)
+→ for logistic regression</div>`,
+six:`<div class="st">Binary Cross-Entropy (Page 19)</div>
+<div class="fm"><span class="fl">From your notes exactly</span>loss = -y * log(ŷ) - (1-y)·log(1-ŷ)
+<span class="fl">Simplified form</span>loss = {  -log(1-ŷ)  if y=0
+        {  -log(ŷ)    if y=1
+Use case: email spam classification
+In last layer: sigmoid activation (binary classification)</div>
+<div class="st">Categorical Cross-Entropy (Page 19)</div>
+<div class="fm">loss(xᵢ, yⱼ) = -Σ(j=1 to no.of class) Yᵢⱼ * logₑ(Ŷᵢⱼ)
+yᵢ = [Yi1, Yi2, Yi3, ..., Yic]
+Yᵢⱼ = 1  if element is in class j
+Yᵢⱼ = 0  otherwise   (one-hot encoding)</div>
+<div class="tip"><b>Notes (Page 20):</b> Ŷᵢⱼ → softmax activation → o/p layer of multiclass classification</div>`},
+hi:{
+two:`<p class="at">Cross-entropy measure karta hai ki predicted probabilities true labels se kitni match karti hain. Binary CE 2 classes, Categorical CE multi-class ke liye.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 19)</span>Binary CE: loss = -y*log(ŷ) - (1-y)·log(1-ŷ)</div>`,
+six:`<div class="st">Binary Cross-Entropy (Page 19 se)</div>
+<div class="fm">loss = -y*log(ŷ) - (1-y)·log(1-ŷ)
+y=0: loss = -log(1-ŷ)
+y=1: loss = -log(ŷ)
+Use case: email spam classification
+Last layer: sigmoid activation</div>
+<div class="st">Categorical Cross-Entropy (Page 19 se)</div>
+<div class="fm">loss = -Σ Yᵢⱼ * logₑ(Ŷᵢⱼ)
+Yᵢⱼ = 1 if class j mein hai, warna 0 (one-hot)
+Output: Softmax activation</div>`}
+},
+
+{id:14,title:"Gradient Descent, SGD & Mini-Batch SGD",cat:"optimizer",tags:["formula","graph"],sub:"Complete optimizer chapter — Pages 20-23",
+en:{
+two:`<p class="at">Gradient Descent minimizes loss by updating weights in the negative gradient direction. SGD uses one sample at a time. Mini-batch SGD uses small batches — best balance of speed and stability.</p>
+<div class="fm"><span class="fl">From your notes (Page 20)</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss/∂Wₒₗᵈ)
+1 epoch = 1 Forward pass + 1 Backward pass</div>`,
+six:`<div class="st">Gradient Descent (Page 20-21)</div>
+<div class="fm"><span class="fl">Loss & Cost functions</span>Loss f(n) = ½(y-ŷ)²          → single instance
+Cost f(n) = (1/2n) Σᵢ(y-ŷ)²  → full dataset
+<span class="fl">Update rule</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · ∂Loss/∂Wₒₗᵈ</div>
+<div class="warn"><b>Disadvantage of Batch GD (Page 21):</b> If millions of records given at once, requires huge RAM, needs GPU. Not feasible → gradient descent does not behave very well.</div>
+<div class="st">SGD — Stochastic Gradient Descent (Page 21)</div>
+<div class="fm">Epoch 1: FD + BD (for 1 sample)
+Epoch 2: FD + BD (for next sample)
+...
+Epoch 10,000: FD + BD</div>
+<ul class="pl"><li><b>Advantage:</b> RAM is not highly required — only single record/instance passed at a time</li><li><b>Disadvantage:</b> Convergence time is very high — global minima may not be achieved</li></ul>
+<div class="st">Mini-Batch SGD (Page 22)</div>
+<div class="fm"><span class="fl">Example from your notes</span>Dataset = 10,000 records
+Batch size = 100
+No. of batches = 10,000 / 100 = 100 batches per epoch</div>
+<ul class="pl"><li>L₁ = Gradient Descent (lots of noise x₁)</li><li>L₂ = SGD (noise level x₂)</li><li>L₃ = Mini-batch SGD (smooth, low noise, fastest convergence)</li></ul>
+<p class="at">"For curve L₃ it is a smooth differentiable and continuous curve with very low noise level and it achieves faster convergence which will show the effectiveness of mini-batch SGD over gradient descent and SGD."</p>`},
+hi:{
+two:`<p class="at">Gradient Descent loss ko minimize karta hai weights negative gradient direction mein update karke. SGD ek sample at a time, Mini-batch chhote batches use karta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 20)</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · (∂Loss/∂Wₒₗᵈ)
+1 epoch = 1 Forward + 1 Backward pass</div>`,
+six:`<div class="st">Mini-Batch SGD (Page 22 se)</div>
+<div class="fm">Dataset = 10,000    Batch size = 100
+No. of batches = 100 per epoch</div>
+<ul class="pl"><li>L₁ = GD — bahut zyada noise</li><li>L₂ = SGD — kuch noise</li><li>L₃ = Mini-batch — smooth, fast convergence ✅</li></ul>
+<div class="warn"><b>Batch GD ka problem:</b> Millions of records ek saath → huge RAM chahiye, GPU chahiye → practically infeasible.</div>
+<ul class="pl"><li><b>SGD advantage:</b> Low RAM — ek hi sample at a time</li><li><b>SGD disadvantage:</b> Convergence time bahut zyada — global minima nahi milti</li></ul>`}
+},
+
+{id:15,title:"SGD with Momentum & Exponential Weighted Average",cat:"optimizer",tags:["formula","graph"],sub:"Momentum = weighted moving average, smoothing — Pages 23-24",
+en:{
+two:`<p class="at">Momentum adds a velocity term that accumulates past gradient information, smoothing the update path. It uses exponential weighted average (EWA) to reduce noise and achieve faster convergence.</p>
+<div class="fm"><span class="fl">From your notes (Page 23-24)</span>Wₜ = Wₜ₋₁ - η · Vdwₜ
+Vdwₜ = β · Vdwₜ₋₁ + (1-β) · ∂L/∂Wₜ₋₁
+β = momentum hyperparameter ∈ (0,1)   e.g. β = 0.95</div>`,
+six:`<div class="st">Mini-Batch SGD with Momentum (Page 23-24)</div>
+<div class="fm"><span class="fl">Weight update</span>Wₙₑᵥᵥ = Wₒₗᵈ - η · ∂Loss/∂Wₒₗᵈ
+bₙ = bₒₗᵈ - η · ∂Loss/∂bₒₗᵈ
+<span class="fl">Velocity (exponential weighted average)</span>Vₜ₁ = a₁
+Vₜ₂ = β · Vₜ₁ + (1-β) · a₂       ← smoothing starts
+Vₜ₃ = β · Vₜ₂ + (1-β) · a₃
+...
+β = 0.95 → Vₜ₂ = 0.95·Vₜ₁ + 0.05·a₂
+<span class="fl">Final update with momentum</span>Wₜ = Wₜ₋₁ - η · Vdwₜ
+Vdwₜ = β · Vdwₜ₋₁ + (1-β) · ∂L/∂Wₜ₋₁</div>
+<div class="st">Advantages of Momentum (from your notes Page 24)</div>
+<ul class="pl"><li>adv: 1. Reduce noise</li><li>2. Also works for mini-batch</li><li>3. Quick convergence</li></ul>
+<div class="tip"><b>Intuition:</b> Momentum = weighted moving average applied to ∂Loss/∂Wₒₗᵈ. We remove noise and smooth the wave. For every timestamp we assign β for smoothing. β ∈ (0,1) is hyperparameter.</div>`},
+hi:{
+two:`<p class="at">Momentum past gradient information accumulate karta hai, update path smooth karta hai. Exponential Weighted Average (EWA) noise reduce karta hai aur faster convergence achieve karta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 23-24)</span>Wₜ = Wₜ₋₁ - η · Vdwₜ
+Vdwₜ = β · Vdwₜ₋₁ + (1-β) · ∂L/∂Wₜ₋₁
+β ∈ (0,1)   e.g. β = 0.95</div>`,
+six:`<div class="st">Formula (Page 24 se)</div>
+<div class="fm">Vₜ₁ = a₁
+Vₜ₂ = β·Vₜ₁ + (1-β)·a₂    (β=0.95 maan lo)
+Vₜ₂ = 0.95·Vₜ₁ + 0.05·a₂
+...
+Wₜ = Wₜ₋₁ - η·Vdwₜ</div>
+<div class="st">Advantages (Page 24 se)</div>
+<ul class="pl"><li>1. Noise reduce karta hai</li><li>2. Mini-batch ke saath bhi kaam karta hai</li><li>3. Quick convergence</li></ul>`}
+},
+
+{id:16,title:"Adagrad Optimizer",cat:"optimizer",tags:["formula"],sub:"Adaptive Gradient — learning rate adjusts per parameter — Page 25",
+en:{
+two:`<p class="at">Adagrad (Adaptive Gradient Descent) adapts the learning rate for each parameter individually. Parameters with large gradients get smaller updates. The learning rate decreases as training progresses.</p>
+<div class="fm"><span class="fl">From your notes (Page 25)</span>Wₙ = Wₒ - η' · ∂Loss/∂Wₒ        ... ①
+η' = η / √(αₜ + ε₀)               ... ②
+αₜ = Σᵢ (∂Loss/∂Wₜ)²            ... ③</div>`,
+six:`<div class="st">Adagrad Algorithm (Page 25)</div>
+<div class="fm"><span class="fl">Standard update</span>Wₙ = Wₒ - η' · ∂Loss/∂Wₒ          ← ①
+<span class="fl">Adaptive learning rate</span>η' = η / √(αₜ + ε₀)                 ← ②
+<span class="fl">Accumulated squared gradient</span>αₜ = Σᵢ(∂Loss/∂Wₜ)²              ← ③</div>
+<div class="st">How it works (from your notes Page 25)</div>
+<p class="at">"For ADAGRAD optimizer the learning rate will be updated as time increases."</p>
+<p class="at">"While we are training the model in the starting epochs, higher learning rate is required, while in last epochs there are no major changes in terms of matrix value (accuracy & loss). This will give a significant reason to apply the adaptiveness in the learning rate (eq ②)."</p>
+<p class="at">"αₜ = Σ(∂Loss/∂Wₜ)² — As the time increases, the value of the derivative (∂Loss/∂Wₜ) will increase which means the value of η' will decrease. In this manner we successfully implement the adaptiveness in optimizer."</p>
+<div class="st">Key Insight</div>
+<ul class="pl"><li>Early epochs → η' high → fast learning</li><li>Later epochs → αₜ large → η' decreases → fine-grained updates</li><li>Problem: αₜ keeps growing → η' → 0 (solved by RMSProp, Adam)</li></ul>`},
+hi:{
+two:`<p class="at">Adagrad har parameter ke liye learning rate individually adapt karta hai. Large gradients wale parameters ko smaller updates milte hain. Training ke saath LR automatically decrease hoti hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 25)</span>η' = η / √(αₜ + ε₀)
+αₜ = Σᵢ (∂Loss/∂Wₜ)²</div>`,
+six:`<div class="st">Algorithm (Page 25 se)</div>
+<div class="fm">Wₙ = Wₒ - η' · ∂Loss/∂Wₒ
+η' = η / √(αₜ + ε₀)
+αₜ = Σᵢ(∂Loss/∂Wₜ)²</div>
+<div class="st">Kaise kaam karta hai (tumhare notes se)</div>
+<ul class="pl"><li>Starting epochs → higher LR chahiye → fast learning</li><li>Last epochs → major changes nahi → LR decrease hoti hai</li><li>αₜ time ke saath badhta hai → η' ghatta hai → fine-tuning</li><li>Problem: αₜ grow karta rehta hai → η' → 0 (RMSProp, Adam ne solve kiya)</li></ul>`}
+},
+
+{id:17,title:"CNN — Convolutional Neural Network",cat:"cnn",tags:["formula","graph"],sub:"6×6 input, 3×3 filter, 4×4 output — Pages 26-27",
+en:{
+two:`<p class="at">CNN uses convolutional layers with learnable filters to extract local features from images. Inspired by the visual cortex of the brain (Cerebral Cortex → Visual Cortex V₁, V₂, ..., Vₙ). Filter slides over input to produce a feature map.</p>
+<div class="fm"><span class="fl">From your notes (Page 26)</span>Output size: O = (I - K + 2P) / S + 1
+Example from notes: 6×6 input, 3×3 filter → 4×4 output</div>`,
+six:`<div class="st">Convolution Operation (from your notes Pages 26-27)</div>
+<div class="fm"><span class="fl">Your notes example (Page 26)</span>Input: 6×6 matrix
+Filter: 3×3 kernel  (with padding → 8×8)
+Output: 4×4 feature map
+
+Output values (from your notes):
+[-8  -12  -11  -8 ]
+[-6    2    8  14 ]
+[ 8   12   11   8 ]
+[ 4   -9  -16  -9 ]
+<span class="fl">With padding (Page 27): 8×8 input → 6×6 output</span>Output:
+[-10 -17 -18 -18 -18  -8]
+[ -4  -8 -12 -11  -8  -8]
+[-13  -6   2   8  14   6]
+[  4   8  12   4   8   8]
+[ 12   4  -9 -16  -9  -2]
+[  1   4   3  10   7   2]</div>
+<div class="st">CNN Architecture (from your notes Page 26)</div>
+<p class="at">Input Image → Apply filter to extract features → Visual Cortex (V₁, V₂, ..., Vₙ) → Final Image</p>
+<p class="at">"Input Image (CAT, APPLE, DOG, TAJ MAHAL) → apply filter to extract features → Cerebral Cortex → Visual Cortex (V₁ V₂ ... Vₙ) → Final Image"</p>
+<div class="st">Filter from your notes</div>
+<div class="fm"><span class="fl">3×3 filter used in notes</span> 1   2   1
+ 0   0   0
+-1  -2  -1     ← edge detection filter (Sobel-like)</div>
+<ul class="pl"><li><b>Parameter sharing:</b> Same filter slides everywhere → fewer parameters</li><li><b>Translation invariance:</b> Features detected anywhere in image</li><li><b>Pooling:</b> Reduces spatial dimensions</li></ul>`},
+hi:{
+two:`<p class="at">CNN images se local features extract karne ke liye learnable filters use karta hai. Brain ke visual cortex se inspired hai. Filter input par slide karta hai aur feature map produce karta hai.</p>
+<div class="fm"><span class="fl">Tumhare notes se (Page 26)</span>Output size = (I - K + 2P) / S + 1
+Example: 6×6 input, 3×3 filter → 4×4 output</div>`,
+six:`<div class="st">Convolution (Pages 26-27 se)</div>
+<div class="fm"><span class="fl">Notes ka example (Page 26)</span>Input: 6×6,  Filter: 3×3 → Output: 4×4
+[-8  -12  -11  -8]
+[-6    2    8  14]
+[ 8   12   11   8]
+[ 4   -9  -16  -9]
+<span class="fl">Padding ke saath (Page 27): 8×8 input → 6×6 output</span>
+<span class="fl">Filter used in notes</span> 1  2  1
+ 0  0  0
+-1 -2 -1   (edge detection)</div>
+<div class="st">Architecture (Page 26 se)</div>
+<p class="at">Input Image (CAT, DOG, etc.) → filter apply karo → features extract karo → Cerebral Cortex → Visual Cortex (V₁, V₂...) → Final Image</p>`}
+},
+
+{id:18,title:"Activation Functions — Which to Use",cat:"activation",tags:[],sub:"Quick reference: Sigmoid vs Tanh vs ReLU vs Softmax comparison",
+en:{
+two:`<p class="at">Each activation function is suited for different scenarios. The key rule: ReLU for hidden layers in most cases; Sigmoid for binary output; Softmax for multiclass output; Tanh when zero-centered output needed.</p>`,
+six:`<div class="st">Complete Comparison Table</div>
+<div class="two-col">
+<div class="mini-card"><div class="mc-title">Sigmoid σ(x)</div>
+<div class="fm" style="font-size:11px;margin:4px 0">f(x) = 1/(1+e⁻ˣ)
+Range: (0,1)   f'max = 0.25
+✅ Binary output layer
+❌ Vanishing gradient
+❌ Not zero-centered</div></div>
+<div class="mini-card"><div class="mc-title">Tanh</div>
+<div class="fm" style="font-size:11px;margin:4px 0">f(x)=(eˣ-e⁻ˣ)/(eˣ+e⁻ˣ)
+Range: (-1,1)  f'max = 1
+✅ Zero-centered
+✅ No vanishing gradient
+✅ Hidden layers</div></div>
+<div class="mini-card"><div class="mc-title">ReLU</div>
+<div class="fm" style="font-size:11px;margin:4px 0">f(x) = max(0,x)
+Range: [0,∞)   f'= 0 or 1
+✅ Fastest computation
+✅ Deep networks
+❌ Dying neuron (x<0)</div></div>
+<div class="mini-card"><div class="mc-title">Softmax</div>
+<div class="fm" style="font-size:11px;margin:4px 0">f(x) = eˣⁱ/Σeˣʲ
+Range: (0,1), sum=1
+✅ Multiclass output
+✅ With cross-entropy</div></div>
+</div>
+<div class="st">Decision Rules (from your notes Page 15)</div>
+<ul class="pl"><li><b>Binary classification:</b> ReLU (hidden) + Sigmoid (output)</li><li><b>Multiclass classification:</b> ReLU (hidden) + Softmax (output)</li><li><b>Regression:</b> ReLU (hidden) + Linear activation (output)</li></ul>`},
+hi:{
+two:`<p class="at">Har activation function alag scenario ke liye suited hai. Main rule: hidden layers mein ReLU, binary output mein Sigmoid, multiclass mein Softmax.</p>`,
+six:`<div class="st">Comparison</div>
+<div class="two-col">
+<div class="mini-card"><div class="mc-title">Sigmoid</div><div class="fm" style="font-size:11px;margin:4px 0">f(x)=1/(1+e⁻ˣ), (0,1), f'max=0.25
+✅ Binary output  ❌ Vanishing gradient</div></div>
+<div class="mini-card"><div class="mc-title">Tanh</div><div class="fm" style="font-size:11px;margin:4px 0">f(x)=(eˣ-e⁻ˣ)/(eˣ+e⁻ˣ), (-1,1), f'max=1
+✅ Zero-centered  ✅ No vanishing gradient</div></div>
+<div class="mini-card"><div class="mc-title">ReLU</div><div class="fm" style="font-size:11px;margin:4px 0">f(x)=max(0,x), [0,∞)
+✅ Fastest  ❌ Dead neuron (x<0)</div></div>
+<div class="mini-card"><div class="mc-title">Softmax</div><div class="fm" style="font-size:11px;margin:4px 0">f(x)=eˣⁱ/Σeˣʲ, sum=1
+✅ Multiclass output</div></div>
+</div>
+<div class="st">Decision Rules (Page 15 se)</div>
+<ul class="pl"><li><b>Binary:</b> ReLU (hidden) + Sigmoid (output)</li><li><b>Multiclass:</b> ReLU (hidden) + Softmax (output)</li><li><b>Regression:</b> ReLU (hidden) + Linear (output)</li></ul>`}
+},
+
+// EXTRA TOPICS FROM 20 QUESTIONS
+{id:19,title:"Hebbian, Competitive & Error-Correction Learning",cat:"extra",tags:["formula"],sub:"Learning rules — from exam questions",
+en:{
+two:`<p class="at">Hebbian: "Neurons that fire together, wire together" — weights increase when both neurons are active. Competitive learning: only the winner neuron updates. Error-correction (Delta Rule): uses error signal (d-y) to update weights.</p>
+<div class="fm"><span class="fl">Hebbian rule</span>Δwᵢⱼ = η · xᵢ · yⱼ
+<span class="fl">Delta Rule (Error-correction)</span>Δwᵢ = η · (d - y) · xᵢ</div>`,
+six:`<div class="st">Hebbian Learning</div>
+<div class="fm">Δwᵢⱼ = η · xᵢ · yⱼ
+Both neurons must fire → weight increases (unsupervised)</div>
+<div class="st">Error-Correction Learning (Modification of Hebbian)</div>
+<div class="fm"><span class="fl">Delta Rule</span>Δwᵢ = η · (d - y) · xᵢ
+d = desired output,   y = actual output
+Uses ERROR signal — supervised learning</div>
+<div class="st">Competitive Learning (Winner-Takes-All)</div>
+<div class="fm">Winner k* = argmax_k (wₖᵀ x)
+Δwₖ* = η(x - wₖ*)     (winner moves toward input)
+Δwₖ  = 0               (losers unchanged)</div>
+<ul class="pl"><li><b>Hebbian:</b> Unsupervised, no teacher needed</li><li><b>Error-Correction:</b> Perceptron learning rule, LMS/Widrow-Hoff</li><li><b>Competitive:</b> Self-Organizing Maps (SOM), K-means</li></ul>`},
+hi:{
+two:`<p class="at">Hebbian: dono neurons fire karein → weight badhta hai. Competitive: sirf winning neuron update hota hai. Error-correction: error signal (d-y) se weights update hote hain.</p>
+<div class="fm"><span class="fl">Hebbian</span>Δwᵢⱼ = η · xᵢ · yⱼ
+<span class="fl">Delta Rule</span>Δwᵢ = η · (d - y) · xᵢ</div>`,
+six:`<div class="st">Teen Learning Rules</div>
+<div class="fm"><span class="fl">Hebbian</span>Δwᵢⱼ = η · xᵢ · yⱼ   (unsupervised)
+<span class="fl">Error-Correction (Delta Rule)</span>Δwᵢ = η · (d - y) · xᵢ   (supervised)
+<span class="fl">Competitive (Winner-Takes-All)</span>k* = argmax_k(wₖᵀx)
+Δwₖ* = η(x-wₖ*)   Δwₖ=0 for losers</div>`}
+},
+
+{id:20,title:"K-Fold Cross-Validation",cat:"extra",tags:["formula","graph"],sub:"Model evaluation and validation technique",
+en:{
+two:`<p class="at">K-Fold CV splits data into K equal folds. The model trains on K-1 folds and validates on the remaining fold, rotating K times. Final score = average of all K validation scores.</p>
+<div class="fm"><span class="fl">Final Score</span>S = (1/K) Σᵢ Sᵢ</div>`,
+six:`<div class="st">Algorithm</div>
+<div class="fm">1. Split data into K equal folds
+2. For i = 1 to K:
+   Train on:    all folds EXCEPT fold i
+   Validate on: fold i → record score Sᵢ
+3. Final Score = (1/K) Σᵢ Sᵢ
+4. Variance    = (1/(K-1)) Σᵢ (Sᵢ - S̄)²</div>
+<svg class="gs" viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg">
+<text x="280" y="15" text-anchor="middle" fill="#546a8a" font-size="12" font-family="DM Sans" font-weight="500">5-Fold Cross-Validation</text>
+<text x="26" y="43" fill="#546a8a" font-size="10">Iter 1</text><text x="26" y="69" fill="#546a8a" font-size="10">Iter 2</text><text x="26" y="95" fill="#546a8a" font-size="10">Iter 3</text><text x="26" y="121" fill="#546a8a" font-size="10">Iter 4</text><text x="26" y="147" fill="#546a8a" font-size="10">Iter 5</text>
+<rect x="66" y="30" width="88" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/><text x="110" y="46" text-anchor="middle" fill="#ef4444" font-size="10">TEST</text>
+<rect x="159" y="30" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/><text x="203" y="46" text-anchor="middle" fill="#546a8a" font-size="9">train</text>
+<rect x="252" y="30" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="345" y="30" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="438" y="30" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="66" y="56" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="159" y="56" width="88" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/><text x="203" y="72" text-anchor="middle" fill="#ef4444" font-size="10">TEST</text>
+<rect x="252" y="56" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="345" y="56" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="438" y="56" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="66" y="82" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="159" y="82" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="252" y="82" width="88" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/><text x="296" y="98" text-anchor="middle" fill="#ef4444" font-size="10">TEST</text>
+<rect x="345" y="82" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="438" y="82" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="66" y="108" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="159" y="108" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="252" y="108" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="345" y="108" width="88" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/><text x="389" y="124" text-anchor="middle" fill="#ef4444" font-size="10">TEST</text>
+<rect x="438" y="108" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="66" y="134" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="159" y="134" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="252" y="134" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="345" y="134" width="88" height="22" rx="4" fill="rgba(79,142,247,0.1)" stroke="#1e3a5f" stroke-width="0.5"/>
+<rect x="438" y="134" width="88" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/><text x="482" y="150" text-anchor="middle" fill="#ef4444" font-size="10">TEST</text>
+</svg>
+<ul class="pl"><li>K=5 or K=10 most commonly used</li><li>LOOCV (K=n): Maximum data use, very expensive computationally</li><li>Low variance in scores → stable, reliable model</li></ul>`},
+hi:{
+two:`<p class="at">K-Fold CV data ko K equal folds mein split karta hai. Model K-1 folds par train hota hai aur remaining fold par validate — K times rotate hota hai.</p>
+<div class="fm">Final Score S = (1/K) Σᵢ Sᵢ</div>`,
+six:`<div class="st">Algorithm</div>
+<div class="fm">1. Data ko K folds mein split karo
+2. For i=1 to K: fold i=TEST, baaki=TRAIN
+3. Final = (1/K) Σ Sᵢ</div>
+<ul class="pl"><li>K=5 ya K=10 sabse common</li><li>Low variance → stable model</li></ul>`}
+},
+
+{id:21,title:"Linear Least Squares Filters",cat:"extra",tags:["formula","graph"],sub:"Optimal linear filter — minimize MSE between desired and actual output",
+en:{
+two:`<p class="at">A linear least-squares filter finds the weight vector w that minimizes the sum of squared errors between the desired output d(n) and the filter output y = wᵀx. It has an exact closed-form solution called the Normal Equations.</p>
+<div class="fm"><span class="fl">Filter output</span>y(n) = wᵀx(n) = Σₖ w(k)·x(n-k)
+<span class="fl">Optimal weights (Normal Equations)</span>w* = (XᵀX)⁻¹ Xᵀd</div>`,
+six:`<div class="st">Problem Formulation</div>
+<div class="fm"><span class="fl">Filter output</span>y(n) = wᵀx(n)
+<span class="fl">Cost function (MSE to minimize)</span>J(w) = E[|d(n) - y(n)|²] = E[|e(n)|²]
+<span class="fl">Closed-form solution (Wiener-Hopf equations)</span>w* = R⁻¹ p
+R = E[x(n)xᵀ(n)]   (input autocorrelation matrix)
+p = E[d(n)x(n)]     (cross-correlation vector)
+<span class="fl">Batch solution — Normal Equations</span>w* = (XᵀX)⁻¹ Xᵀd
+X = input matrix (n×p),  d = desired output vector
+<span class="fl">Minimum MSE</span>J_min = σ²_d - pᵀR⁻¹p</div>
+<svg class="gs" viewBox="0 0 540 120" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="alq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#4f8ef7" stroke-width="1.5"/></marker></defs>
+<rect x="10" y="42" width="80" height="34" rx="6" fill="#0d1220" stroke="#4f8ef7" stroke-width="1"/><text x="50" y="64" text-anchor="middle" fill="#93c5fd" font-size="11" font-family="DM Sans">Input x(n)</text>
+<rect x="130" y="42" width="110" height="34" rx="6" fill="#0d1220" stroke="#a78bfa" stroke-width="1"/><text x="185" y="60" text-anchor="middle" fill="#c4b5fd" font-size="11" font-family="DM Sans" font-weight="600">Linear Filter</text><text x="185" y="72" text-anchor="middle" fill="#546a8a" font-size="10">y = wᵀx</text>
+<rect x="290" y="18" width="90" height="34" rx="6" fill="#0d1220" stroke="#10b981" stroke-width="1"/><text x="335" y="40" text-anchor="middle" fill="#6ee7b7" font-size="11" font-family="DM Sans">Desired d(n)</text>
+<rect x="290" y="70" width="90" height="34" rx="6" fill="#0d1220" stroke="#f59e0b" stroke-width="1"/><text x="335" y="92" text-anchor="middle" fill="#fcd34d" font-size="11" font-family="DM Sans">Error e(n)</text>
+<rect x="430" y="42" width="100" height="34" rx="6" fill="#0d1220" stroke="#ef4444" stroke-width="1"/><text x="480" y="60" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="DM Sans" font-weight="600">Min MSE</text><text x="480" y="72" text-anchor="middle" fill="#546a8a" font-size="10">w*=R⁻¹p</text>
+<line x1="90" y1="59" x2="128" y2="59" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#alq)"/>
+<line x1="240" y1="59" x2="288" y2="85" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#alq)"/>
+<line x1="335" y1="52" x2="335" y2="68" stroke="#10b981" stroke-width="1.5" marker-end="url(#alq)"/>
+<line x1="380" y1="87" x2="428" y2="67" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#alq)"/>
+</svg>
+<div class="st">Applications</div>
+<ul class="pl"><li><b>Echo cancellation:</b> Remove echo from phone calls</li><li><b>Channel equalization:</b> Undo distortion in communications</li><li><b>Noise reduction:</b> Signal denoising in audio/images</li><li><b>Adaptive beamforming:</b> Steer antenna/microphone arrays</li></ul>`},
+hi:{
+two:`<p class="at">Linear least-squares filter weight vector w dhundta hai jo desired output d(n) aur filter output y = wᵀx ke beech squared errors minimize kare. Iska exact closed-form solution hota hai — Normal Equations.</p>
+<div class="fm"><span class="fl">Optimal weights</span>w* = (XᵀX)⁻¹ Xᵀd
+<span class="fl">Wiener-Hopf solution</span>w* = R⁻¹ p</div>`,
+six:`<div class="st">Formulas</div>
+<div class="fm"><span class="fl">Filter output</span>y(n) = wᵀx(n)
+<span class="fl">Cost function</span>J(w) = E[|d(n)-y(n)|²]
+<span class="fl">Wiener-Hopf</span>w* = R⁻¹p
+R = E[x(n)xᵀ(n)]   p = E[d(n)x(n)]
+<span class="fl">Normal Equations (batch)</span>w* = (XᵀX)⁻¹ Xᵀd</div>
+<div class="st">Applications</div>
+<ul class="pl"><li>Echo cancellation — phone calls mein echo remove</li><li>Channel equalization — communication distortion undo</li><li>Noise reduction — audio/image denoising</li><li>Adaptive beamforming — antenna/microphone arrays</li></ul>`}
+},
+
+{id:22,title:"LMS Algorithm (Least Mean Squares)",cat:"extra",tags:["formula","graph"],sub:"Widrow-Hoff adaptive filter — real-time weight update",
+en:{
+two:`<p class="at">The LMS (Least Mean Squares) algorithm, also called Widrow-Hoff rule, is an adaptive version of the linear least-squares filter. Instead of computing R⁻¹ (expensive), it updates weights iteratively using the error signal — one sample at a time.</p>
+<div class="fm"><span class="fl">LMS weight update</span>w(n+1) = w(n) + η · e(n) · x(n)
+e(n) = d(n) - y(n) = d(n) - wᵀ(n)x(n)</div>`,
+six:`<div class="st">Algorithm Steps</div>
+<div class="fm"><span class="fl">Step 1 — Filter output</span>y(n) = wᵀ(n) x(n)
+<span class="fl">Step 2 — Error</span>e(n) = d(n) - y(n)
+<span class="fl">Step 3 — Weight update (Widrow-Hoff)</span>w(n+1) = w(n) + η · e(n) · x(n)
+<span class="fl">Stability condition</span>0 &lt; η &lt; 2 / (N · Pₓₓ)
+N = filter length,  Pₓₓ = average input power</div>
+<svg class="gs" viewBox="0 0 500 140" xmlns="http://www.w3.org/2000/svg">
+<text x="250" y="18" text-anchor="middle" fill="#546a8a" font-size="11" font-family="DM Sans">LMS convergence — error decreases over iterations</text>
+<line x1="40" y1="120" x2="460" y2="120" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="25" x2="40" y2="120" stroke="#1e3a5f" stroke-width="1"/>
+<text x="465" y="124" fill="#546a8a" font-size="10">n (iterations)</text>
+<text x="28" y="29" fill="#546a8a" font-size="10">MSE</text>
+<path d="M50 35 Q80 36 120 50 Q160 68 200 85 Q240 100 290 110 Q340 116 400 118 Q430 119 450 119" fill="none" stroke="#4f8ef7" stroke-width="2.5"/>
+<text x="380" y="112" fill="#4f8ef7" font-size="10" font-family="DM Sans">converges to J_min</text>
+<line x1="40" y1="118" x2="460" y2="118" stroke="#10b981" stroke-width="1" stroke-dasharray="4 2" opacity="0.6"/>
+<text x="430" y="115" fill="#10b981" font-size="9">J_min</text>
+</svg>
+<div class="st">LMS vs Least Squares</div>
+<ul class="pl"><li><b>Least Squares:</b> Batch — needs full data, computes R⁻¹ exactly, expensive O(n³)</li><li><b>LMS:</b> Online/adaptive — updates one sample at a time, no matrix inversion, cheap</li><li><b>LMS use case:</b> Real-time adaptive filtering — echo cancellers, equalisers, beamformers</li></ul>
+<div class="tip"><b>Connection to gradient descent:</b> LMS is stochastic gradient descent applied to the MSE cost function of a linear filter.</div>`},
+hi:{
+two:`<p class="at">LMS (Widrow-Hoff) algorithm ek adaptive filter hai. Har sample ke baad error e(n) = d(n) - y(n) compute karta hai aur weights update karta hai — matrix inversion ki zaroorat nahi.</p>
+<div class="fm"><span class="fl">LMS update</span>w(n+1) = w(n) + η · e(n) · x(n)
+e(n) = d(n) - wᵀ(n)x(n)</div>`,
+six:`<div class="st">Algorithm</div>
+<div class="fm">y(n) = wᵀ(n)x(n)
+e(n) = d(n) - y(n)
+w(n+1) = w(n) + η·e(n)·x(n)
+<span class="fl">Stability condition</span>0 &lt; η &lt; 2/(N·Pₓₓ)</div>
+<ul class="pl"><li><b>Least Squares:</b> Batch — full data chahiye, R⁻¹ compute karo, expensive</li><li><b>LMS:</b> Online — ek sample at a time, no matrix inversion, fast</li><li><b>Connection:</b> LMS = linear filter par SGD</li></ul>`}
+},
+
+{id:23,title:"Learning Rate Annealing",cat:"extra",tags:["formula","graph"],sub:"Gradually reduce η for better convergence — schedules",
+en:{
+two:`<p class="at">Learning rate annealing gradually reduces the learning rate η during training. Large η early on enables fast learning; smaller η later enables fine-grained convergence to a minimum without overshooting.</p>
+<div class="fm"><span class="fl">Step Decay</span>η(t) = η₀ · γ^(t/T)      γ &lt; 1
+<span class="fl">Exponential Decay</span>η(t) = η₀ · e^(-λt)</div>`,
+six:`<div class="st">Annealing Schedules</div>
+<div class="fm"><span class="fl">Step Decay</span>η(t) = η₀ · γ^(t/T)
+γ = decay factor &lt; 1  (e.g. drop by 0.1 every 10 epochs)
+<span class="fl">Exponential Decay</span>η(t) = η₀ · e^(-λt)
+<span class="fl">Cosine Annealing</span>η(t) = η_min + ½(η_max - η_min)(1 + cos(πt/T))
+<span class="fl">1/t Decay</span>η(t) = η₀ / (1 + decay_rate · t)</div>
+<svg class="gs" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="125" x2="460" y2="125" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="25" x2="40" y2="125" stroke="#1e3a5f" stroke-width="1"/>
+<text x="465" y="129" fill="#546a8a" font-size="10">epoch t</text>
+<text x="28" y="28" fill="#546a8a" font-size="10">η</text>
+<path d="M40 32 L120 32 L120 52 L200 52 L200 72 L300 72 L300 92 L400 92 L400 112 L460 112" fill="none" stroke="#ef4444" stroke-width="1.8"/>
+<path d="M40 32 Q160 36 260 65 Q360 95 460 118" fill="none" stroke="#4f8ef7" stroke-width="1.8"/>
+<path d="M40 32 Q120 45 200 70 Q300 100 420 118 Q440 120 460 121" fill="none" stroke="#10b981" stroke-width="1.8"/>
+<path d="M40 32 Q80 42 130 65 Q220 100 300 116 Q380 122 460 124" fill="none" stroke="#a78bfa" stroke-width="1.8"/>
+<text x="400" y="85" fill="#ef4444" font-size="10">step</text>
+<text x="400" y="98" fill="#4f8ef7" font-size="10">exponential</text>
+<text x="400" y="111" fill="#10b981" font-size="10">cosine</text>
+<text x="400" y="124" fill="#a78bfa" font-size="10">1/t</text>
+</svg>
+<div class="st">Why Anneal?</div>
+<ul class="pl"><li><b>Large η early:</b> Fast learning, covers large loss surface quickly</li><li><b>Small η late:</b> Fine-grained, precise convergence near minimum</li><li><b>Constant η problem:</b> May overshoot minimum or oscillate around it</li><li><b>Warm restarts (SGDR):</b> Cosine annealing periodically resets η_max — helps escape local minima</li></ul>`},
+hi:{
+two:`<p class="at">Learning rate annealing training ke dauran η gradually reduce karta hai. Pehle badi LR = fast learning, baad mein chhoti LR = precise convergence without overshooting.</p>
+<div class="fm"><span class="fl">Step Decay</span>η(t) = η₀ · γ^(t/T)
+<span class="fl">Exponential Decay</span>η(t) = η₀ · e^(-λt)
+<span class="fl">Cosine Annealing</span>η(t) = η_min + ½(η_max-η_min)(1+cos(πt/T))</div>`,
+six:`<div class="st">Schedules</div>
+<div class="fm">Step:        η(t) = η₀ · γ^(t/T)
+Exponential: η(t) = η₀ · e^(-λt)
+Cosine:      η(t) = η_min + ½(η_max-η_min)(1+cos(πt/T))
+1/t decay:   η(t) = η₀ / (1 + k·t)</div>
+<div class="st">Kyun anneal karein?</div>
+<ul class="pl"><li>Early mein badi LR → fast learning</li><li>Late mein chhoti LR → fine convergence, overshoot nahi</li><li>Constant LR → minimum ke paas oscillate kar sakta hai</li></ul>`}
+},
+
+{id:24,title:"Hessian Matrix in Neural Network Optimization",cat:"extra",tags:["formula"],sub:"Second-order derivatives — curvature of loss surface",
+en:{
+two:`<p class="at">The Hessian matrix H contains all second-order partial derivatives of the loss function with respect to weights. It describes the curvature of the loss surface and is used in advanced (second-order) optimization methods like Newton's method.</p>
+<div class="fm"><span class="fl">Hessian definition</span>Hᵢⱼ = ∂²L / (∂wᵢ ∂wⱼ)
+<span class="fl">Newton's update (uses Hessian)</span>w := w - H⁻¹ · ∇L</div>`,
+six:`<div class="st">Definition</div>
+<div class="fm"><span class="fl">Hessian matrix H</span>H = ∂²L / ∂w∂wᵀ
+Hᵢⱼ = ∂²L / (∂wᵢ · ∂wⱼ)    (i,j-th element)
+<span class="fl">Newton's optimization (2nd order)</span>w := w - H⁻¹ · ∇L
+(compares to 1st order GD: w := w - η·∇L)</div>
+<div class="st">What Hessian Tells Us</div>
+<div class="fm"><span class="fl">Eigenvalues of H determine critical point type</span>All eigenvalues &gt; 0 → Positive definite → Local MINIMUM ✅
+All eigenvalues &lt; 0 → Negative definite → Local MAXIMUM
+Mixed eigenvalues  → Indefinite → SADDLE POINT ⚠️
+<span class="fl">Condition number</span>κ(H) = λ_max / λ_min
+Large κ → ill-conditioned loss surface → slow convergence</div>
+<div class="st">Role in Deep Learning</div>
+<ul class="pl"><li><b>Loss surface curvature:</b> Large eigenvalue = steep direction, small = flat direction</li><li><b>Saddle points:</b> Very common in deep networks — Hessian has mixed signs</li><li><b>Problem:</b> Computing H⁻¹ is O(n³) — impractical for large networks (millions of params)</li><li><b>Approximations used:</b> L-BFGS (quasi-Newton), Fisher Information Matrix (for natural gradient), diagonal Hessian approximation</li></ul>
+<div class="tip"><b>Key insight:</b> First-order methods (GD, Adam) use only ∇L. Second-order methods use both ∇L and H for faster convergence but at much higher computational cost.</div>`},
+hi:{
+two:`<p class="at">Hessian matrix H mein loss function ke sabhi second-order partial derivatives hote hain. Yeh loss surface ki curvature describe karta hai aur advanced optimization (Newton's method) mein use hota hai.</p>
+<div class="fm"><span class="fl">Hessian</span>Hᵢⱼ = ∂²L / (∂wᵢ ∂wⱼ)
+<span class="fl">Newton's update</span>w := w - H⁻¹ · ∇L</div>`,
+six:`<div class="st">Formulas</div>
+<div class="fm">H = ∂²L/∂w∂wᵀ
+Hᵢⱼ = ∂²L/(∂wᵢ·∂wⱼ)
+Newton's update: w := w - H⁻¹·∇L</div>
+<div class="st">Eigenvalues kya batate hain</div>
+<ul class="pl"><li>Sabhi &gt; 0 → Local Minimum ✅</li><li>Sabhi &lt; 0 → Local Maximum</li><li>Mixed signs → Saddle Point ⚠️</li></ul>
+<div class="st">Problem</div>
+<ul class="pl"><li>H⁻¹ compute karna O(n³) hai — large networks ke liye impractical</li><li>Alternatives: L-BFGS, Fisher Information, diagonal approximation</li></ul>`}
+},
+
+{id:25,title:"Pruning in Neural Networks",cat:"extra",tags:[],sub:"Remove redundant weights/neurons to compress models",
+en:{
+two:`<p class="at">Pruning removes low-importance weights or neurons from a trained neural network. This reduces model size and inference time while maintaining accuracy. The key idea: not all weights contribute equally — many are redundant.</p>`,
+six:`<div class="st">Types of Pruning</div>
+<ul class="pl">
+<li><b>Weight pruning (Unstructured):</b> Remove individual weights below threshold |w| &lt; ε — highest compression, hardware-unfriendly</li>
+<li><b>Neuron pruning:</b> Remove entire neurons with low activation magnitude</li>
+<li><b>Filter pruning (CNN):</b> Remove entire convolutional filters — hardware-friendly</li>
+<li><b>Structured pruning:</b> Remove entire rows/columns of weight matrices — maintains regular structure</li>
+</ul>
+<div class="st">Iterative Magnitude Pruning</div>
+<div class="fm">1. Train full model to convergence
+2. Rank all weights by |w|  (magnitude)
+3. Remove bottom p% weights (set to 0)
+4. Fine-tune remaining non-zero weights
+5. Repeat until target sparsity is reached</div>
+<div class="st">Lottery Ticket Hypothesis</div>
+<p class="at">A small "winning ticket" subnetwork exists within a large network. When trained in isolation with the original initialization, it can match the full network's accuracy.</p>
+<div class="st">Significance</div>
+<ul class="pl">
+<li>90%+ model compression possible without significant accuracy loss</li>
+<li>Critical for deploying models on edge devices (phones, IoT)</li>
+<li>Faster inference → lower latency</li>
+<li>Can actually improve generalization by reducing overfitting</li>
+</ul>`,},
+hi:{
+two:`<p class="at">Pruning trained network se low-importance weights ya neurons remove karta hai. Model size aur inference time reduce hoti hai bina accuracy significantly drop kiye. Key idea: sabhi weights equally important nahi hote.</p>`,
+six:`<div class="st">Types</div>
+<ul class="pl">
+<li><b>Weight pruning:</b> Individual weights remove karo jab |w| &lt; ε</li>
+<li><b>Neuron pruning:</b> Low activation wale entire neurons remove</li>
+<li><b>Filter pruning (CNN):</b> Entire filters remove karo</li>
+<li><b>Structured pruning:</b> Rows/columns remove karo — hardware-friendly</li>
+</ul>
+<div class="st">Iterative Magnitude Pruning</div>
+<div class="fm">1. Full model train karo
+2. Weights ko |w| se rank karo
+3. Bottom p% remove karo (0 set karo)
+4. Remaining weights fine-tune karo
+5. Target sparsity tak repeat karo</div>
+<div class="st">Significance</div>
+<ul class="pl"><li>90%+ compression possible</li><li>Edge devices ke liye critical (phones, IoT)</li><li>Lottery Ticket Hypothesis: ek chhota winning ticket subnetwork exist karta hai</li></ul>`}
+},
+
+{id:26,title:"Interpolation Problem in Machine Learning",cat:"extra",tags:["formula","graph"],sub:"Generalization vs memorization — bias-variance tradeoff",
+en:{
+two:`<p class="at">The interpolation problem asks whether a model can perfectly fit all training data (zero training error) while still generalizing to unseen data. Classically this seemed impossible, but modern deep networks show "benign interpolation" — they interpolate AND generalize well.</p>
+<div class="fm"><span class="fl">Interpolation condition</span>f(xᵢ) = yᵢ   for ALL training points i
+i.e., training error = 0</div>`,
+six:`<div class="st">Classical View — Bias-Variance Tradeoff</div>
+<div class="fm"><span class="fl">Total expected error</span>Error = Bias² + Variance + Irreducible Noise
+<span class="fl">Underfitting (high bias)</span>Model too simple → cannot fit training data
+<span class="fl">Overfitting (high variance)</span>Model too complex → memorizes noise, fails on test</div>
+<svg class="gs" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="130" x2="460" y2="130" stroke="#1e3a5f" stroke-width="1"/>
+<line x1="40" y1="20" x2="40" y2="130" stroke="#1e3a5f" stroke-width="1"/>
+<text x="465" y="134" fill="#546a8a" font-size="10">Model complexity →</text>
+<text x="28" y="24" fill="#546a8a" font-size="10">Error</text>
+<line x1="240" y1="15" x2="240" y2="130" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>
+<text x="242" y="13" fill="#a78bfa" font-size="9">Interpolation threshold</text>
+<path d="M50 28 Q90 70 140 100 Q180 118 220 126 Q232 130 240 132" fill="none" stroke="#ef4444" stroke-width="2"/>
+<path d="M240 132 Q250 118 270 88 Q310 52 370 38 Q420 32 450 31" fill="none" stroke="#4f8ef7" stroke-width="2"/>
+<text x="130" y="70" fill="#ef4444" font-size="10" font-family="DM Sans">Classical (overfitting)</text>
+<text x="320" y="52" fill="#4f8ef7" font-size="10" font-family="DM Sans">Modern (benign)</text>
+<text x="80" y="148" fill="#ef4444" font-size="9">underfitting ← → overfitting</text>
+<text x="330" y="148" fill="#4f8ef7" font-size="9">→ generalizes well</text>
+</svg>
+<div class="st">Double Descent Phenomenon</div>
+<p class="at">Classical theory says error rises after the interpolation threshold (overfitting). But in practice, very large over-parameterized models (deep networks) show a SECOND descent — error falls again and reaches low test error despite fitting training data perfectly.</p>
+<div class="st">Challenges & Solutions</div>
+<ul class="pl">
+<li><b>Overfitting prevention:</b> L1/L2 Regularization, Dropout, Early stopping, Data augmentation</li>
+<li><b>Implicit regularization:</b> SGD + large models tend to find "flat" minima that generalize</li>
+<li><b>Double descent:</b> Over-parameterization can be beneficial — modern DL leverages this</li>
+</ul>`,},
+hi:{
+two:`<p class="at">Interpolation problem poochta hai: kya model sabhi training data perfectly fit karte hue naye data par bhi generalize kar sakta hai? Classical theory kehti thi nahi, lekin modern deep networks dono kar lete hain — "benign interpolation".</p>
+<div class="fm"><span class="fl">Interpolation condition</span>f(xᵢ) = yᵢ   for all i   (zero training error)</div>`,
+six:`<div class="st">Classical Bias-Variance Tradeoff</div>
+<div class="fm">Error = Bias² + Variance + Irreducible Noise
+Underfitting: model too simple → high bias
+Overfitting:  model too complex → high variance</div>
+<div class="st">Double Descent</div>
+<p class="at">Classical theory: interpolation threshold ke baad error badhta hai (overfitting). Lekin modern deep networks mein ek SECOND descent hota hai — bahut large models zero training error ke saath bhi generalize karte hain.</p>
+<div class="st">Solutions</div>
+<ul class="pl"><li>L1/L2 Regularization, Dropout, Early stopping</li><li>Implicit regularization: SGD flat minima dhundta hai</li></ul>`}
+},
+
+{id:27,title:"Challenges in Deep Learning — Elephant in the Room",cat:"extra",tags:[],sub:"7 critical unsolved problems often ignored in DL research",
+en:{
+two:`<p class="at">"Elephant in the room" refers to obvious but ignored problems in deep learning. Despite impressive benchmarks, DL has fundamental challenges: black-box nature, data hunger, adversarial vulnerability, distribution shift, catastrophic forgetting, compute cost, and bias/fairness.</p>`,
+six:`<div class="st">7 Major Challenges</div>
+<ul class="pl">
+<li><b>1. Black Box / No Interpretability:</b> We cannot explain WHY a deep network makes a specific prediction. Critical problem in healthcare (diagnosis), law (sentencing), and finance (loan approval).</li>
+<li><b>2. Data Hunger:</b> Deep networks need millions of labeled samples. Humans learn from just a few examples (few-shot learning). Labeling data is expensive and slow.</li>
+<li><b>3. Adversarial Vulnerability:</b> Tiny imperceptible perturbations (adding pixel-level noise) can fool a network with 99% confidence. A stop sign with stickers → misclassified as speed limit sign.</li>
+<li><b>4. Distribution Shift / Poor OOD Generalization:</b> Model trained on sunny images fails catastrophically in rain. Test data distribution ≠ training data distribution → model breaks.</li>
+<li><b>5. Catastrophic Forgetting:</b> Learning a new task causes the network to completely forget previously learned tasks. No continual learning by default.</li>
+<li><b>6. Massive Compute & Carbon Cost:</b> Training GPT-scale models costs millions of dollars and emits enormous CO₂ — not sustainable or accessible.</li>
+<li><b>7. Bias & Fairness:</b> Models learn and amplify societal biases present in training data — racial, gender, socioeconomic biases.</li>
+</ul>
+<div class="st">Why "Elephant in the Room"?</div>
+<p class="at">These problems are well-known to the community but are often downplayed in favor of reporting new benchmark improvements. Addressing them is essential for safe real-world deployment of DL systems.</p>
+<div class="st">Active Research Solutions</div>
+<ul class="pl">
+<li><b>XAI (Explainable AI):</b> LIME, SHAP, attention visualization, saliency maps</li>
+<li><b>Adversarial training:</b> Train on adversarially perturbed examples</li>
+<li><b>Transfer learning & self-supervised:</b> Reduce data hunger (GPT, CLIP, DINO)</li>
+<li><b>Continual learning:</b> EWC (Elastic Weight Consolidation), progressive networks</li>
+<li><b>Fairness-aware training:</b> Reweighting, adversarial debiasing</li>
+</ul>`,},
+hi:{
+two:`<p class="at">"Elephant in the room" = obvious lekin ignore kiye jaane wale problems in DL. Impressive benchmarks ke bawajood: black-box, data hunger, adversarial vulnerability, distribution shift, catastrophic forgetting, compute cost, aur bias.</p>`,
+six:`<div class="st">7 Major Challenges</div>
+<ul class="pl">
+<li><b>1. Black Box:</b> Explain nahi kar sakte ki network prediction kyun karta hai — healthcare, law mein critical</li>
+<li><b>2. Data Hunger:</b> Millions of labeled samples chahiye — expensive aur slow</li>
+<li><b>3. Adversarial Vulnerability:</b> Tiny noise → model 99% confidence se galat predict karta hai</li>
+<li><b>4. Distribution Shift:</b> Train data aur test data distribution different hone par model fail</li>
+<li><b>5. Catastrophic Forgetting:</b> Naya task seekhne par purana bhool jaata hai</li>
+<li><b>6. Compute Cost:</b> GPT-scale training = millions of dollars + huge CO₂</li>
+<li><b>7. Bias & Fairness:</b> Training data ke biases model learn aur amplify karta hai</li>
+</ul>
+<div class="st">Solutions</div>
+<ul class="pl"><li>XAI: LIME, SHAP, attention visualization</li><li>Adversarial training, Transfer learning, Continual learning</li></ul>`}
+},
+
+{id:28,title:"Tensor Operations in Deep Learning",cat:"extra",tags:["formula"],sub:"Multi-dimensional arrays — fundamental data structure of DL",
+en:{
+two:`<p class="at">A tensor is a multi-dimensional array — the fundamental data structure in deep learning. Scalars are 0D tensors, vectors are 1D, matrices are 2D. All neural network operations (forward pass, backprop) are tensor operations, parallelized on GPUs.</p>
+<div class="fm"><span class="fl">Tensor ranks</span>Scalar (0D): shape ()         e.g. 5.0
+Vector (1D): shape (n,)       e.g. [1,2,3]
+Matrix (2D): shape (m,n)      e.g. [[1,2],[3,4]]
+Image  (3D): shape (H,W,C)    e.g. (28,28,3)
+Batch  (4D): shape (B,H,W,C)  e.g. (32,28,28,3)</div>`,
+six:`<div class="st">Key Tensor Operations</div>
+<div class="fm"><span class="fl">Element-wise (same shape required)</span>C = A + B     C = A * B     C = A - B
+<span class="fl">Matrix multiplication (dot product)</span>C = A @ B     shape: (m,n) @ (n,p) → (m,p)
+This is the core of every dense layer: output = W @ input
+<span class="fl">Transpose</span>Aᵀ   shape (m,n) → (n,m)
+<span class="fl">Reshape / Flatten</span>x.reshape(B, -1)   used to flatten feature maps for FC layers
+<span class="fl">Broadcasting</span>A(3,1) + B(1,4) = C(3,4)   auto-expands dimensions
+<span class="fl">Reduction operations</span>sum(A, axis=0)  mean(A)  max(A, axis=1)
+<span class="fl">Softmax (tensor form)</span>softmax(z)ᵢ = exp(zᵢ) / Σⱼ exp(zⱼ)</div>
+<div class="st">Role in Neural Networks</div>
+<ul class="pl">
+<li><b>Forward pass:</b> Output = Activation(W @ Input + b) — all tensor ops</li>
+<li><b>Backprop:</b> Gradient of loss w.r.t. W is also a tensor of same shape as W</li>
+<li><b>GPU parallelism:</b> GPUs are designed to execute tensor operations in parallel — this is why DL is fast on GPUs</li>
+<li><b>Frameworks:</b> PyTorch (torch.Tensor), TensorFlow (tf.Tensor) operate natively on tensors</li>
+<li><b>Memory layout:</b> Row-major (C-style) vs column-major affects performance — frameworks handle this</li>
+</ul>`,},
+hi:{
+two:`<p class="at">Tensor ek multi-dimensional array hai — deep learning ka fundamental data structure. Sabhi neural network operations (forward pass, backprop) tensor operations hain jo GPU par parallel execute hote hain.</p>
+<div class="fm">Scalar (0D): 5.0
+Vector (1D): [1,2,3]         shape (3,)
+Matrix (2D): [[1,2],[3,4]]   shape (2,2)
+Image  (3D): shape (H,W,C)   e.g. (28,28,3)
+Batch  (4D): shape (B,H,W,C) e.g. (32,28,28,3)</div>`,
+six:`<div class="st">Key Operations</div>
+<div class="fm"><span class="fl">Element-wise</span>C = A+B    C = A*B    (same shape)
+<span class="fl">Matrix multiplication</span>C = A @ B   (m,n)@(n,p) → (m,p)
+Dense layer: output = W @ input + b
+<span class="fl">Transpose</span>Aᵀ: (m,n) → (n,m)
+<span class="fl">Reshape/Flatten</span>x.reshape(B,-1)  FC layer se pehle
+<span class="fl">Broadcasting</span>A(3,1) + B(1,4) = C(3,4)</div>
+<div class="st">Neural Networks mein Role</div>
+<ul class="pl"><li>Forward pass = sabhi tensor operations</li><li>Gradient of loss w.r.t. W = same shape ka tensor</li><li>GPU tensor operations parallel execute karta hai → fast training</li><li>PyTorch, TensorFlow natively tensors par kaam karte hain</li></ul>`}
+}
+
+];
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const filtered=T.filter(t=>{
+    const mc=cF==='all'||t.cat===cF;
+    const mq=!q||t.title.toLowerCase().includes(q)||t.sub.toLowerCase().includes(q)||
+      (t.en.two+t.en.six).toLowerCase().includes(q);
+    return mc&&mq;
+  });
+  document.getElementById('tc').textContent=filtered.length+' topic'+(filtered.length!==1?'s':'')+' shown';
+  if(!filtered.length){document.getElementById('list').innerHTML='<div class="nr">No topics found. Try a different keyword.</div>';return}
+  const catMap={ann:'ANN',activation:'Activation',loss:'Loss',optimizer:'Optimizer',cnn:'CNN',extra:'Extra'};
+  document.getElementById('list').innerHTML=filtered.map(t=>{
+    const isO=openCards[t.id]||false;
+    const tab=cTabs[t.id]||'2';
+    const ld=t[cL]||t.en;
+    return`<div class="card ${isO?'open':''}" id="c${t.id}">
+<div class="ch" onclick="tog(${t.id})">
+  <div class="cnum">${String(t.id).padStart(2,'0')}</div>
+  <div class="ctw"><div class="ct">${t.title}</div><div class="cs">${t.sub}</div></div>
+  <div class="cbadges">
+    <span class="bdg bc">${catMap[t.cat]||t.cat}</span>
+    ${t.tags.includes('formula')?'<span class="bdg bf">∑ Formula</span>':''}
+    ${t.tags.includes('graph')?'<span class="bdg bg2">📊 Graph</span>':''}
+    <span class="chev">${isO?'▲':'▼'}</span>
+  </div>
+</div>
+${isO?`<div class="cb">
+  <div class="mtabs">
+    <button class="mt ${tab==='2'?'active':''}" onclick="setT(${t.id},'2',event)">✏️ 2 Marks</button>
+    <button class="mt ${tab==='6'?'active':''}" onclick="setT(${t.id},'6',event)">📝 6 Marks</button>
+  </div>
+  <div class="ans ${tab==='2'?'active':''}">${ld.two}</div>
+  <div class="ans ${tab==='6'?'active':''}">${ld.six}</div>
+</div>`:''}
+</div>`}).join('');
+}
+render();
+</script>
+</body>
+</html>
